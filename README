@@ -1,0 +1,5 @@
+Thunder Neural Networks (TNN) is a parallelized neural network C library based on alternating direction method of multipliers (ADMM).
+
+The design paradigm of the library follows the architectural code given by professor Yann LeCun ( http://yann.lecun.com ) for his course Machine Learning and Pattern Recognition at New York University.
+
+All presented here are for the purpose of testing. You cannot utilize any of the content unless permitted by all of the authors. We will make it GPLed after the entire library is finished.
