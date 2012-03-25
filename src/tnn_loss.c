@@ -10,9 +10,9 @@
  * tnn_error tnn_loss_debug(tnn_loss *l);
  */
 
-#include "tnn_error.h"
-#include "tnn_state.h"
-#include "tnn_loss.h"
+#include <tnn_error.h>
+#include <tnn_state.h>
+#include <tnn_loss.h>
 
 //Polymorphic back-propagation method
 tnn_error tnn_loss_bprop(tnn_loss *l){
