@@ -28,6 +28,8 @@ typedef enum __ENUM_tnn_error{
 
   TNN_ERROR_LOSS_MISTYPE, //Loss type mismatch
 
+  TNN_ERROR_MACHINE_NOMOD, //No modules in the machine
+
   TNN_ERROR_SIZE //Size indicator
 } tnn_error;
 
