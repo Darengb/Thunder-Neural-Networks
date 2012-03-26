@@ -92,6 +92,9 @@ int main(){
 
   printf("Running backward propagation: %s\n", TEST_FUNC(tnn_machine_bprop(&m)));
   printf("Debugging machine: %s\n", TEST_FUNC(tnn_machine_debug(&m)));
+
+  printf("Destroying the machine: %s\n", TEST_FUNC(tnn_machine_destroy(&m)));
+  printf("Debugging machine %s\n", TEST_FUNC(tnn_machine_debug(&m)));
   return 0;
   
 }

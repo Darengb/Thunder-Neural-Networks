@@ -20,7 +20,7 @@ tnn_error tnn_state_init(tnn_state *s, int n){
 
 tnn_error tnn_state_debug(tnn_state *s){
   int i;
-  printf("state = %p, size = %d, valid = %c\n", s, s->size, s->valid == true?'T':'F');
+  printf("state = %p, size = %d, valid = %c, prev = %p, next = %p\n", s, s->size, s->valid == true?'T':'F', s->prev, s->next);
   if(s->valid == true){
     printf("x:");
     for(i = 0; i < s->size; i = i + 1){

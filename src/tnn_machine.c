@@ -231,6 +231,7 @@ tnn_error tnn_machine_destroy(tnn_machine *m){
     }
     free(mel);
   }
+  m->m = NULL;
 
   //Destroy input module and output module
   if((ret = tnn_module_destroy(&m->min)) != TNN_ERROR_SUCCESS ||
@@ -240,7 +241,9 @@ tnn_error tnn_machine_destroy(tnn_machine *m){
 
   //Destroy all the io states
   DL_FOREACH_SAFE(states, sel, stmp){
-    free(sel);
+    if(sel != &m->sin && sel != &m->sout){
+      free(sel);
+    }
   }
 
   return TNN_ERROR_SUCCESS;
