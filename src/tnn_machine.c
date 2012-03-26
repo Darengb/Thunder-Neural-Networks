@@ -4,16 +4,16 @@
  *
  * This source implements the following functions:
  * tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput);
- * tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param *p);
- * tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param *io);
+ * tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param **p);
+ * tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param **io);
  * tnn_error tnn_machine_state_alloc(tnn_machine *m, tnn_state *s);
  * tnn_error tnn_machine_state_calloc(tnn_machine *m, tnn_state *s);
- * tnn_error tnn_machine_get_sin(tnn_machine *m, tnn_state *s);
- * tnn_error tnn_machine_get_sou(tnn_machine *m, tnn_state *s);
+ * tnn_error tnn_machine_get_sin(tnn_machine *m, tnn_state **s);
+ * tnn_error tnn_machine_get_sout(tnn_machine *m, tnn_state **s);
  * tnn_error tnn_machine_module_append(tnn_machine *m, tnn_module *mod);
  * tnn_error tnn_machine_module_prepend(tnn_machine *m, tnn_module *mod);
- * tnn_error tnn_machine_get_min(tnn_machine *m, tnn_module *mod);
- * tnn_error tnn_machine_get_mout(tnn_machine *m, tnn_module *mod);
+ * tnn_error tnn_machine_get_min(tnn_machine *m, tnn_module **mod);
+ * tnn_error tnn_machine_get_mout(tnn_machine *m, tnn_module **mod);
  * tnn_error tnn_machine_bprop(tnn_machine *m);
  * tnn_error tnn_machine_fprop(tnn_machine *m);
  * tnn_error tnn_machine_randomize(tnn_machine *m, double k);
@@ -35,13 +35,13 @@ tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput){
   tnn_error ret;
 
   //Initialize input and output
-  if ((ret = tnn_state_init(&m->sin, ninput)) != TNN_ERROR_SUCCESS &&
+  if ((ret = tnn_state_init(&m->sin, ninput)) != TNN_ERROR_SUCCESS ||
       (ret = tnn_state_init(&m->sout, noutput)) != TNN_ERROR_SUCCESS){
     return ret;
   }
 
   //Initialize io and p
-  if((ret = tnn_param_init(&m->io)) != TNN_ERROR_SUCCESS &&
+  if((ret = tnn_param_init(&m->io)) != TNN_ERROR_SUCCESS ||
      (ret = tnn_param_init(&m->p)) != TNN_ERROR_SUCCESS){
     return ret;
   }
@@ -50,7 +50,7 @@ tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput){
   m->m = NULL;
 
   //Allocate input and output
-  if((ret = tnn_param_state_alloc(&m->io, &m->sin)) != TNN_ERROR_SUCCESS &&
+  if((ret = tnn_param_state_alloc(&m->io, &m->sin)) != TNN_ERROR_SUCCESS ||
      (ret = tnn_param_state_alloc(&m->io, &m->sout)) != TNN_ERROR_SUCCESS){
     return ret;
   }
@@ -58,14 +58,14 @@ tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput){
 }
 
 //Get the parameter of this machine
-tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param *p){
-  p = &m->p;
+tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param **p){
+  *p = &m->p;
   return TNN_ERROR_SUCCESS;
 }
 
 //Get the io paramter of this machine
-tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param *io){
-  io = &m->io;
+tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param **io){
+  *io = &m->io;
   return TNN_ERROR_SUCCESS;
 }
 
@@ -80,14 +80,14 @@ tnn_error tnn_machine_state_calloc(tnn_machine *m, tnn_state *s){
 }
 
 //Get the input state of this machine
-tnn_error tnn_machine_get_sin(tnn_machine *m, tnn_state *s){
-  s = &m->sin;
+tnn_error tnn_machine_get_sin(tnn_machine *m, tnn_state **s){
+  *s = &m->sin;
   return TNN_ERROR_SUCCESS;
 }
 
 //Get the output state of this machine
-tnn_error tnn_machine_get_sout(tnn_machine *m, tnn_state *s){
-  s = &m->sout;
+tnn_error tnn_machine_get_sout(tnn_machine *m, tnn_state **s){
+  *s = &m->sout;
   return TNN_ERROR_SUCCESS;
 }
 
@@ -104,14 +104,14 @@ tnn_error tnn_machine_module_prepend(tnn_machine *m, tnn_module *mod){
 }
 
 //Get the input module of this machine
-tnn_error tnn_machine_get_min(tnn_machine *m, tnn_module *mod){
-  mod = &m->min;
+tnn_error tnn_machine_get_min(tnn_machine *m, tnn_module **mod){
+  *mod = &m->min;
   return TNN_ERROR_SUCCESS;
 }
 
 //Get the output module of this machine
-tnn_error tnn_machine_get_mout(tnn_machine *m, tnn_module *mod){
-  mod = &m->mout;
+tnn_error tnn_machine_get_mout(tnn_machine *m, tnn_module **mod){
+  *mod = &m->mout;
   return TNN_ERROR_SUCCESS;
 }
 
@@ -120,9 +120,9 @@ tnn_error tnn_machine_bprop(tnn_machine *m){
   tnn_module *mod;
   tnn_error ret;
 
-  //Routine check
-  if(m->m == NULL){
-    return TNN_ERROR_MACHINE_NOMOD;
+  //backward from mout
+  if((ret = tnn_module_bprop(&m->mout)) != TNN_ERROR_SUCCESS){
+    return ret;
   }
 
   //backward propagation
@@ -130,6 +130,11 @@ tnn_error tnn_machine_bprop(tnn_machine *m){
     if((ret = tnn_module_bprop(mod)) != TNN_ERROR_SUCCESS){
       return ret;
     }
+  }
+
+  //backward from min
+  if((ret = tnn_module_bprop(&m->min)) != TNN_ERROR_SUCCESS){
+    return ret;
   }
 
   return TNN_ERROR_SUCCESS;
@@ -140,9 +145,9 @@ tnn_error tnn_machine_fprop(tnn_machine *m){
   tnn_module *mod;
   tnn_error ret;
 
-  //Routine check
-  if(m->m == NULL){
-    return TNN_ERROR_MACHINE_NOMOD;
+  //forward from min
+  if((ret = tnn_module_fprop(&m->min)) != TNN_ERROR_SUCCESS){
+    return ret;
   }
 
   //forward propagation
@@ -151,6 +156,12 @@ tnn_error tnn_machine_fprop(tnn_machine *m){
       return ret;
     }
   }
+
+  //forward from mout
+  if((ret = tnn_module_fprop(&m->mout)) != TNN_ERROR_SUCCESS){
+    return ret;
+  }
+
   return TNN_ERROR_SUCCESS;
 }
 
@@ -160,13 +171,18 @@ tnn_error tnn_machine_randomize(tnn_machine *m, double k){
   tnn_error ret;
   bool ndef;
 
-  //Routine check
-  if(m->m == NULL){
-    return TNN_ERROR_MACHINE_NOMOD;
+  ndef = false;
+
+  //randomize from min
+  if((ret = tnn_module_randomize(&m->min, k)) != TNN_ERROR_SUCCESS){
+    if(ret == TNN_ERROR_MODULE_FUNCNDEF){
+      ndef = true;
+    } else {
+      return ret;
+    }
   }
 
   //randomize
-  ndef = false;
   DL_FOREACH(m->m, mod){
     if((ret = tnn_module_randomize(mod, k)) != TNN_ERROR_SUCCESS){
       if(ret == TNN_ERROR_MODULE_FUNCNDEF){
@@ -174,6 +190,15 @@ tnn_error tnn_machine_randomize(tnn_machine *m, double k){
       } else {
 	return ret;
       }
+    }
+  }
+
+  //randomize from mout
+  if((ret = tnn_module_randomize(&m->mout, k)) != TNN_ERROR_SUCCESS){
+    if(ret == TNN_ERROR_MODULE_FUNCNDEF){
+      ndef = true;
+    } else {
+      return ret;
     }
   }
   
@@ -190,21 +215,28 @@ tnn_error tnn_machine_randomize(tnn_machine *m, double k){
 tnn_error tnn_machine_destroy(tnn_machine *m){
   tnn_state *states, *sel, *stmp;
   tnn_module *mel, *mtmp;
+  tnn_error ret;
   states = m->io.states;
 
   //Destroy all of the parameters
-  tnn_param_destroy(&m->io);
-  tnn_param_destroy(&m->p);
+  if((ret = tnn_param_destroy(&m->io)) != TNN_ERROR_SUCCESS || 
+     (ret = tnn_param_destroy(&m->p)) != TNN_ERROR_SUCCESS){
+    return ret;
+  }
 
   //Destroy all of the modules
   DL_FOREACH_SAFE(m->m, mel, mtmp){
-    tnn_module_destroy(mel);
+    if((ret = tnn_module_destroy(mel)) != TNN_ERROR_SUCCESS){
+      return ret;
+    }
     free(mel);
   }
 
   //Destroy input module and output module
-  tnn_module_destroy(&m->min);
-  tnn_module_destroy(&m->mout);
+  if((ret = tnn_module_destroy(&m->min)) != TNN_ERROR_SUCCESS ||
+     (ret = tnn_module_destroy(&m->mout)) != TNN_ERROR_SUCCESS){
+    return ret;
+  }
 
   //Destroy all the io states
   DL_FOREACH_SAFE(states, sel, stmp){
@@ -247,26 +279,36 @@ tnn_error tnn_machine_debug(tnn_machine *m){
     return ret;
   }
 
+  ndef = false;
+
   printf("min: ");
   if((ret = tnn_module_debug(&m->min)) != TNN_ERROR_SUCCESS){
-    printf("min module debug error in machine\n");
-    return ret;
+    if(ret == TNN_ERROR_MODULE_FUNCNDEF){
+      ndef = true;
+    } else {
+      printf("min module debug error in machine\n");
+      return ret;
+    }
   }
 
-  printf("mout: ");
-  if((ret = tnn_module_debug(&m->mout)) != TNN_ERROR_SUCCESS){
-    printf("mout module debug error in machine\n");
-    return ret;
-  }
-
-  ndef = false;
   DL_FOREACH(m->m, mel){
     if((ret = tnn_module_debug(mel)) != TNN_ERROR_SUCCESS){
       if(ret == TNN_ERROR_MODULE_FUNCNDEF){
 	ndef = true;
       } else {
+	printf("module debug error in machine\n");
 	return ret;
       }
+    }
+  }
+
+  printf("mout: ");
+  if((ret = tnn_module_debug(&m->mout)) != TNN_ERROR_SUCCESS){
+    if(ret == TNN_ERROR_MODULE_FUNCNDEF){
+      ndef = true;
+    } else {
+      printf("mout module debug error in machine\n");
+      return ret;
     }
   }
 

@@ -8,16 +8,16 @@
  *
  * This header defines the following functions:
  * tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput);
- * tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param *p);
- * tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param *io);
+ * tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param **p);
+ * tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param **io);
  * tnn_error tnn_machine_state_alloc(tnn_machine *m, tnn_state *s);
  * tnn_error tnn_machine_state_calloc(tnn_machine *m, tnn_state *s);
- * tnn_error tnn_machine_get_sin(tnn_machine *m, tnn_state *s);
- * tnn_error tnn_machine_get_sout(tnn_machine *m, tnn_state *s);
+ * tnn_error tnn_machine_get_sin(tnn_machine *m, tnn_state **s);
+ * tnn_error tnn_machine_get_sout(tnn_machine *m, tnn_state **s);
  * tnn_error tnn_machine_module_append(tnn_machine *m, tnn_module *mod);
  * tnn_error tnn_machine_module_prepend(tnn_machine *m, tnn_module *mod);
- * tnn_error tnn_machine_get_min(tnn_machine *m, tnn_module *mod);
- * tnn_error tnn_machine_get_mout(tnn_machine *m, tnn_module *mod);
+ * tnn_error tnn_machine_get_min(tnn_machine *m, tnn_module **mod);
+ * tnn_error tnn_machine_get_mout(tnn_machine *m, tnn_module **mod);
  * tnn_error tnn_machine_bprop(tnn_machine *m);
  * tnn_error tnn_machine_fprop(tnn_machine *m);
  * tnn_error tnn_machine_randomize(tnn_machine *m, double k);
@@ -62,10 +62,10 @@ typedef struct __STRUCT_tnn_machine{
 tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput);
 
 //Get the parameter of this machine
-tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param *p);
+tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param **p);
 
 //Get the io paramter of this machine
-tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param *io);
+tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param **io);
 
 //Allocate state in io for this machine
 tnn_error tnn_machine_state_alloc(tnn_machine *m, tnn_state *s);
@@ -74,10 +74,10 @@ tnn_error tnn_machine_state_alloc(tnn_machine *m, tnn_state *s);
 tnn_error tnn_machine_state_calloc(tnn_machine *m, tnn_state *s);
 
 //Get the input state of this machine
-tnn_error tnn_machine_get_sin(tnn_machine *m, tnn_state *s);
+tnn_error tnn_machine_get_sin(tnn_machine *m, tnn_state **s);
 
 //Get the output state of this machine
-tnn_error tnn_machine_get_sout(tnn_machine *m, tnn_state *s);
+tnn_error tnn_machine_get_sout(tnn_machine *m, tnn_state **s);
 
 //Append a module to the machine
 tnn_error tnn_machine_module_append(tnn_machine *m, tnn_module *mod);
@@ -86,10 +86,10 @@ tnn_error tnn_machine_module_append(tnn_machine *m, tnn_module *mod);
 tnn_error tnn_machine_module_prepend(tnn_machine *m, tnn_module *mod);
 
 //Get the input module of this machine
-tnn_error tnn_machine_get_min(tnn_machine *m, tnn_module *mod);
+tnn_error tnn_machine_get_min(tnn_machine *m, tnn_module **mod);
 
 //Get the output module of this machine
-tnn_error tnn_machine_get_mout(tnn_machine *m, tnn_module *mod);
+tnn_error tnn_machine_get_mout(tnn_machine *m, tnn_module **mod);
 
 //Run back propagation backward with respect to modules
 tnn_error tnn_machine_bprop(tnn_machine *m);

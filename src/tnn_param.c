@@ -203,7 +203,7 @@ tnn_error tnn_param_debug(tnn_param *p){
   if(p->size > 0){
     printf("x:");
     for(i = 0; i < p->size; i = i + 1){
-      printf(" %g", gsl_vector_get(p->dx, i));
+      printf(" %g", gsl_vector_get(p->x, i));
     }
     printf("\n");
     printf("dx:");
