@@ -31,6 +31,8 @@ typedef enum __ENUM_tnn_module_type{
   TNN_MODULE_TYPE_TANH, //Hyperbolic tangent module
   TNN_MODULE_TYPE_SOFTMAX, //Softmax module
   TNN_MODULE_TYPE_NEGEXP, //Exponential of each negated component
+  TNN_MODULE_TYPE_SUM, //Sum module
+  TNN_MODULE_TYPE_BRANCH, //Branch module
   TNN_MODULE_TYPE_CONV1, //1-D convolutional module
   TNN_MODULE_TYPE_CONV2, //2-D convolutional module
 

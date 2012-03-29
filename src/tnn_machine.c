@@ -226,7 +226,7 @@ tnn_error tnn_machine_destroy(tnn_machine *m){
 
   //Destroy all of the modules
   DL_FOREACH_SAFE(m->m, mel, mtmp){
-    if((ret = tnn_module_destroy(mel)) != TNN_ERROR_SUCCESS){
+    if((ret = tnn_module_destroy(mel)) != TNN_ERROR_SUCCESS && ret != TNN_ERROR_MODULE_FUNCNDEF){
       return ret;
     }
     free(mel);
@@ -234,8 +234,8 @@ tnn_error tnn_machine_destroy(tnn_machine *m){
   m->m = NULL;
 
   //Destroy input module and output module
-  if((ret = tnn_module_destroy(&m->min)) != TNN_ERROR_SUCCESS ||
-     (ret = tnn_module_destroy(&m->mout)) != TNN_ERROR_SUCCESS){
+  if(((ret = tnn_module_destroy(&m->min)) != TNN_ERROR_SUCCESS && ret != TNN_ERROR_MODULE_FUNCNDEF) ||
+     ((ret = tnn_module_destroy(&m->mout)) != TNN_ERROR_SUCCESS && ret != TNN_ERROR_MODULE_FUNCNDEF)){
     return ret;
   }
 
@@ -246,7 +246,7 @@ tnn_error tnn_machine_destroy(tnn_machine *m){
     }
   }
 
-  return TNN_ERROR_SUCCESS;
+  return ret;
 }
 
 //Debug this machine

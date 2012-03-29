@@ -19,7 +19,7 @@ tnn_error tnn_loss_bprop(tnn_loss *l){
   if (l->bprop != NULL){
     return (*l->bprop)(l);
   }
-  return TNN_ERROR_SUCCESS;
+  return TNN_ERROR_LOSS_FUNCNDEF;
 }
 
 //Polymorphic forward-propagation method
@@ -27,7 +27,7 @@ tnn_error tnn_loss_fprop(tnn_loss *l){
   if(l->fprop != NULL){
     return (*l->fprop)(l);
   }
-  return TNN_ERROR_SUCCESS;
+  return TNN_ERROR_LOSS_FUNCNDEF;
 }
 
 //Polymorphic randomize method
@@ -35,7 +35,7 @@ tnn_error tnn_loss_randomize(tnn_loss *l, double k){
   if(l->randomize != NULL){
     return (*l->randomize)(l, k);
   }
-  return TNN_ERROR_SUCCESS;
+  return TNN_ERROR_LOSS_FUNCNDEF;
 }
 
 //Polymorphic destroy method
@@ -43,7 +43,7 @@ tnn_error tnn_loss_destroy(tnn_loss *l){
   if(l->destroy != NULL){
     return (*l->destroy)(l);
   }
-  return TNN_ERROR_SUCCESS;
+  return TNN_ERROR_LOSS_FUNCNDEF;
 }
 
 //Polymorphic debug method
@@ -77,5 +77,5 @@ tnn_error tnn_loss_debug(tnn_loss *l){
     return ret;
   }
 
-  return TNN_ERROR_SUCCESS;
+  return TNN_ERROR_LOSS_FUNCNDEF;
 }
