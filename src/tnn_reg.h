@@ -11,8 +11,8 @@
  * The header defines the following functions:
  * tnn_error tnn_reg_l(tnn_reg *r, gsl_vector *w, double *l);
  * tnn_error tnn_reg_d(tnn_reg *r, gsl_vector *w, gsl_vector *d);
- * tnn_error tnn_reg_add_l(tnn_reg *r, gsl_vector *w, double *l);
- * tnn_error tnn_reg_add_d(tnn_reg *r, gsl_vector *w, gsl_vector *d);
+ * tnn_error tnn_reg_addl(tnn_reg *r, gsl_vector *w, double *l);
+ * tnn_error tnn_reg_addd(tnn_reg *r, gsl_vector *w, gsl_vector *d);
  * tnn_error tnn_reg_debug(tnn_reg *r);
  * tnn_error tnn_reg_destroy(tnn_reg *r);
  */
@@ -25,6 +25,7 @@
 
 //Regularizer types
 typedef enum __ENUM_tnn_reg_type{
+  TNN_REG_TYPE_NONE, //Nothing...
   TNN_REG_TYPE_L1, //L1 regularizer
   TNN_REG_TYPE_L2, //L2 regularizer
 
@@ -61,10 +62,10 @@ tnn_error tnn_reg_l(tnn_reg *r, gsl_vector *w, double *l);
 tnn_error tnn_reg_d(tnn_reg *r, gsl_vector *w, gsl_vector *d);
 
 //Add the loss of the regularizer to the value l
-tnn_error tnn_reg_add_l(tnn_reg *r, gsl_vector *w, double *l);
+tnn_error tnn_reg_addl(tnn_reg *r, gsl_vector *w, double *l);
 
 //Add the derivatives of the regularizer to the vector d
-tnn_error tnn_reg_add_d(tnn_reg *r, gsl_vector *w, gsl_vector *d);
+tnn_error tnn_reg_addd(tnn_reg *r, gsl_vector *w, gsl_vector *d);
 
 //Polymorphically debug the regularizer
 tnn_error tnn_reg_debug(tnn_reg *r);

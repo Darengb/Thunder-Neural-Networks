@@ -33,7 +33,7 @@ tnn_error tnn_reg_d(tnn_reg *r, gsl_vector *w, gsl_vector *d){
 }
 
 //Add the loss of the regularizer to the value l
-tnn_error tnn_reg_add_l(tnn_reg *r, gsl_vector *w, double *l){
+tnn_error tnn_reg_addl(tnn_reg *r, gsl_vector *w, double *l){
   tnn_error ret;
   double regl;
   if(r->l != NULL){
@@ -48,7 +48,7 @@ tnn_error tnn_reg_add_l(tnn_reg *r, gsl_vector *w, double *l){
 }
 
 //Add the derivatives of the regularizer to the vector d
-tnn_error tnn_reg_add_d(tnn_reg *r, gsl_vector *w, gsl_vector *d){
+tnn_error tnn_reg_addd(tnn_reg *r, gsl_vector *w, gsl_vector *d){
   tnn_error ret;
   gsl_vector *regd;
   if(r->d != NULL){

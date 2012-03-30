@@ -9,7 +9,7 @@
  *             TNN_TRAINER_CLASS_FUNC_DESTROY destroy)
  *
  * The header defines the following functions:
- * tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t *label);
+ * tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t *label, double *loss);
  * tnn_error tnn_trainer_class_learn(tnn_trainer_class *t, gsl_vector *input, size_t label);
  * tnn_error tnn_trainer_class_try(tnn_trainer_class *t, gsl_vector *input, size_t label, bool* correct);
  * tnn_error tnn_trainer_class_test(tnn_trainer_class *t, gsl_matrix *inputs, size_t *labels, double *loss, double *error);
@@ -19,6 +19,7 @@
  * tnn_error tnn_trainer_class_get_machine(tnn_trainer_class *t, tnn_machine **m);
  * tnn_error tnn_trainer_class_get_loss(tnn_trainer_class *t, tnn_loss **l);
  * tnn_error tnn_trainer_class_get_reg(tnn_trainer_class *t, tnn_reg **r);
+ * tnn_error tnn_trainer_class_get_label(tnn_trainer_class *t, tnn_state **s);
  */
 
 #include <string.h> //For size_t
@@ -63,9 +64,11 @@ typedef struct __STRUCT_tnn_trainer_class{
   //Network loss
   tnn_loss l;
   //Network label state (to be used in loss and allocated in machine's io)
-  tnn_state *label;
+  tnn_state label;
   //Regularizer
   tnn_reg r;
+  //Regularizer constant
+  double lambda;
   //Learn method
   TNN_TRAINER_CLASS_FUNC_LEARN learn;
   //Train method
@@ -77,7 +80,7 @@ typedef struct __STRUCT_tnn_trainer_class{
 } tnn_trainer_class;
 
 //Determine the label of a sample
-tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t *label);
+tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t *label, double *loss);
 
 //Polymorphically learn a sample
 tnn_error tnn_trainer_class_learn(tnn_trainer_class *t, gsl_vector *input, size_t label);
@@ -105,5 +108,8 @@ tnn_error tnn_trainer_class_get_loss(tnn_trainer_class *t, tnn_loss **l);
 
 //Get the address of the regularizer in the trainer
 tnn_error tnn_trainer_class_get_reg(tnn_trainer_class *t, tnn_reg **r);
+
+//Get the address of the label
+tnn_error tnn_trainer_class_get_label(tnn_trainer_class *t, tnn_state **s);
 
 #endif //TNN_TRAINER_CLASS_H

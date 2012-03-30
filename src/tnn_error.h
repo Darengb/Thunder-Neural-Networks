@@ -32,10 +32,11 @@ typedef enum __ENUM_tnn_error{
   TNN_ERROR_MACHINE_NOMOD, //No modules in the machine
 
   TNN_ERROR_TRAINER_CLASS_FUNCNDEF, //Trainer - classification function undefined
-  TNN_ERROR_TRAINER_CLASS_MISTYPE, //Trainer - classification function mismatch
+  TNN_ERROR_TRAINER_CLASS_MISTYPE, //Trainer - classification type mismatch
 
   TNN_ERROR_REG_FUNCNDEF, //Regularizer function undefined
   TNN_ERROR_REG_MISTYPE, //Regularizer type mismatch
+  TNN_ERROR_REG_INCOMP, //Regularizer numerical incompatibility
 
   TNN_ERROR_SIZE //Size indicator
 } tnn_error;

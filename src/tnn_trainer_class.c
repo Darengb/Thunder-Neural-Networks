@@ -3,7 +3,7 @@
  * Version 0.1, 03/29/2012
  *
  * The source implements the following functions:
- * tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t *label);
+ * tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t *label, double *loss);
  * tnn_error tnn_trainer_class_learn(tnn_trainer_class *t, gsl_vector *input, size_t label);
  * tnn_error tnn_trainer_class_try(tnn_trainer_class *t, gsl_vector *input, size_t label, bool* correct);
  * tnn_error tnn_trainer_class_test(tnn_trainer_class *t, gsl_matrix *inputs, size_t *labels, double *loss, double *error);
@@ -13,6 +13,7 @@
  * tnn_error tnn_trainer_class_get_machine(tnn_trainer_class *t, tnn_machine **m);
  * tnn_error tnn_trainer_class_get_loss(tnn_trainer_class *t, tnn_loss **l);
  * tnn_error tnn_trainer_class_get_reg(tnn_trainer_class *t, tnn_reg **r);
+ * tnn_error tnn_trainer_class_get_label(tnn_trainer_class *t, tnn_state **s);
  */
 
 #include <string.h>
@@ -24,9 +25,62 @@
 #include <tnn_reg.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
+#include <gsl/gsl_blas.h>
 
 //Determine the label of a sample
-tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t *label){
+tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t *label, double* loss){
+  tnn_error ret;
+  tnn_state *sin;
+  gsl_vector_view v;
+  int i;
+
+  //Get the machine's input state
+  if((ret = tnn_machine_get_sin(&t->m, &sin)) != TNN_ERROR_SUCCESS){
+    return ret;
+  }
+
+  //Check compatibility of state
+  if(sin->size != input->size){
+    return TNN_ERROR_STATE_INCOMP;
+  }
+
+  //Check validity of states
+  if(sin->valid != true){
+    return TNN_ERROR_STATE_INVALID;
+  }
+  if(t->label.valid != true){
+    return TNN_ERROR_STATE_INVALID;
+  }
+
+  //Copy input to sin
+  if(gsl_blas_dcopy(input, &sin->x) != 0){
+    return TNN_ERROR_GSL;
+  }
+
+  //Do forward propagation
+  if((ret = tnn_machine_fprop(&t->m)) != TNN_ERROR_SUCCESS){
+    return ret;
+  }
+
+  //Copy each lset to each label, and do forward propagation of loss
+  for(i = 0; i < t->lset->size1; i = i + 1){
+    v = gsl_matrix_row(t->lset, i);
+    if(gsl_blas_dcopy(&v.vector, &t->label.x) != 0){
+      return TNN_ERROR_GSL;
+    }
+    if((ret = tnn_loss_fprop(&t->l)) != TNN_ERROR_SUCCESS){
+      return ret;
+    }
+    gsl_vector_set(t->losses, i, -gsl_vector_get(&t->l.output->x, 0));
+  }
+
+  //Find the label with the smallest loss
+  *label = gsl_blas_idamax(t->losses);
+  *loss = -gsl_vector_get(t->losses, *label);
+
+  //Recover the loss to positive
+  gsl_blas_dscal(-1.0, t->losses);
+
   return TNN_ERROR_SUCCESS;
 }
 
@@ -40,11 +94,40 @@ tnn_error tnn_trainer_class_learn(tnn_trainer_class *t, gsl_vector *input, size_
 
 //Try one sample
 tnn_error tnn_trainer_class_try(tnn_trainer_class *t, gsl_vector *input, size_t label, bool* correct){
+  size_t lb;
+  double ls;
+  tnn_error ret;
+  if((ret = tnn_trainer_class_run(t, input, &lb, &ls)) != TNN_ERROR_SUCCESS){
+    return ret;
+  }
+  *correct = (lb == label);
   return TNN_ERROR_SUCCESS;
 }
 
 //Test on samples
 tnn_error tnn_trainer_class_test(tnn_trainer_class *t, gsl_matrix *inputs, size_t *labels, double *loss, double *error){
+  gsl_vector_view input;
+  size_t lb;
+  double ls;
+  tnn_error ret;
+  int i;
+
+  *loss = 0;
+  *error = 0;
+  for(i = 0; i < inputs->size1; i = i + 1){
+    input = gsl_matrix_row(inputs, i);
+    if((ret = tnn_trainer_class_run(t, &input.vector, &lb, &ls)) != TNN_ERROR_SUCCESS){
+      return ret;
+    }
+    if(lb == labels[i]){
+      *error = *error + 1.0;
+    }
+    *loss = *loss + ls;
+  }
+  if(inputs->size1 != 0){
+    *error = (*error)/(double)inputs->size1;
+  }
+
   return TNN_ERROR_SUCCESS;
 }
 
@@ -98,8 +181,8 @@ tnn_error tnn_trainer_class_debug(tnn_trainer_class *t){
 
   ret = TNN_ERROR_TRAINER_CLASS_FUNCNDEF;
 
-  printf("Trainer classification (unknown) = %p, type = %d, constant = %p, label_set = %p, losses = %p, label = %p\n", t, t->t, t->c, t->lset, t->losses, t->label);
-  printf("learn = %p, train = %p, debug = %p, destroy = %p\n", t->learn, t->train, t->debug, t->destroy);
+  printf("Trainer classification (unknown) = %p, type = %d, constant = %p, label_set = %p, lambda = %g\n", t, t->t, t->c, t->lset, t->lambda);
+  printf("losses = %p, learn = %p, train = %p, debug = %p, destroy = %p\n", t->losses, t->learn, t->train, t->debug, t->destroy);
 
   printf("machine: ");
   if((ret = tnn_machine_debug(&t->m)) != TNN_ERROR_SUCCESS && ret != TNN_ERROR_MODULE_FUNCNDEF){
@@ -114,7 +197,7 @@ tnn_error tnn_trainer_class_debug(tnn_trainer_class *t){
   }
 
   printf("label: ");
-  if((ret = tnn_state_debug(t->label)) != TNN_ERROR_SUCCESS){
+  if((ret = tnn_state_debug(&t->label)) != TNN_ERROR_SUCCESS){
     printf("label state debug error in trainer classification\n");
     return ret;
   }
@@ -158,5 +241,11 @@ tnn_error tnn_trainer_class_get_loss(tnn_trainer_class *t, tnn_loss **l){
 //Get the address of the regularizer in the trainer
 tnn_error tnn_trainer_class_get_reg(tnn_trainer_class *t, tnn_reg **r){
   *r = &t->r;
+  return TNN_ERROR_SUCCESS;
+}
+
+//Get the address of the label
+tnn_error tnn_trainer_class_get_label(tnn_trainer_class *t, tnn_state **s){
+  *s = &t->label;
   return TNN_ERROR_SUCCESS;
 }
