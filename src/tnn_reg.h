@@ -12,7 +12,7 @@
  * tnn_error tnn_reg_l(tnn_reg *r, gsl_vector *w, double *l);
  * tnn_error tnn_reg_d(tnn_reg *r, gsl_vector *w, gsl_vector *d);
  * tnn_error tnn_reg_addl(tnn_reg *r, gsl_vector *w, double *l);
- * tnn_error tnn_reg_addd(tnn_reg *r, gsl_vector *w, gsl_vector *d);
+ * tnn_error tnn_reg_addd(tnn_reg *r, gsl_vector *w, gsl_vector *d, double lambda);
  * tnn_error tnn_reg_debug(tnn_reg *r);
  * tnn_error tnn_reg_destroy(tnn_reg *r);
  */
@@ -65,7 +65,7 @@ tnn_error tnn_reg_d(tnn_reg *r, gsl_vector *w, gsl_vector *d);
 tnn_error tnn_reg_addl(tnn_reg *r, gsl_vector *w, double *l);
 
 //Add the derivatives of the regularizer to the vector d
-tnn_error tnn_reg_addd(tnn_reg *r, gsl_vector *w, gsl_vector *d);
+tnn_error tnn_reg_addd(tnn_reg *r, gsl_vector *w, gsl_vector *d, double lambda);
 
 //Polymorphically debug the regularizer
 tnn_error tnn_reg_debug(tnn_reg *r);

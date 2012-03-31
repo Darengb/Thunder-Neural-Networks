@@ -36,8 +36,8 @@
 
 //Trainer types
 typedef enum __ENUM_tnn_trainer_class_type{
-  TNN_TRAINER_TYPE_CLASS_SGD, //Stochastic gradient descent classification trainer
-  TNN_TRAINER_TYPE_CLASS_PSGD, //p-Thread stochastic gradient descent classification trainer
+  TNN_TRAINER_CLASS_TYPE_NSGD, //Naive stochastic gradient descent classification trainer
+  TNN_TRAINER_CLASS_TYPE_TSGD, //Threaded stochastic gradient descent classification trainer
 
   TNN_TRAINER_TYPE_SIZE //Size indicator (if you want to define your own polymorph-safe trainer, do it above this integer)
 } tnn_trainer_class_type;

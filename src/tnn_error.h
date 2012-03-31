@@ -33,6 +33,8 @@ typedef enum __ENUM_tnn_error{
 
   TNN_ERROR_TRAINER_CLASS_FUNCNDEF, //Trainer - classification function undefined
   TNN_ERROR_TRAINER_CLASS_MISTYPE, //Trainer - classification type mismatch
+  TNN_ERROR_TRAINER_CLASS_NVALIDP, //Trainer - classification invalid input parameters
+  
 
   TNN_ERROR_REG_FUNCNDEF, //Regularizer function undefined
   TNN_ERROR_REG_MISTYPE, //Regularizer type mismatch

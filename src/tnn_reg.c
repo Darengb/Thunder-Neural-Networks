@@ -48,17 +48,20 @@ tnn_error tnn_reg_addl(tnn_reg *r, gsl_vector *w, double *l){
 }
 
 //Add the derivatives of the regularizer to the vector d
-tnn_error tnn_reg_addd(tnn_reg *r, gsl_vector *w, gsl_vector *d){
+tnn_error tnn_reg_addd(tnn_reg *r, gsl_vector *w, gsl_vector *d, double lambda){
   tnn_error ret;
   gsl_vector *regd;
   if(r->d != NULL){
     regd = gsl_vector_alloc(d->size);
+    if(regd == NULL){
+      return TNN_ERROR_GSL;
+    }
     //Check whether the execution is successful
     if((ret = (*r->d)(r, w, regd)) != TNN_ERROR_SUCCESS){
       gsl_vector_free(regd);
       return ret;
     }
-    if(gsl_blas_daxpy(1.0, regd, d) != 0){
+    if(gsl_blas_daxpy(lambda, regd, d) != 0){
       gsl_vector_free(regd);
       return TNN_ERROR_GSL;
     }
