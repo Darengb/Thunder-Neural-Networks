@@ -7,10 +7,11 @@
  * tnn_error tnn_param_state_alloc(tnn_param *p, tnn_state *s);
  * tnn_error tnn_param_state_calloc(tnn_param *p, tnn_state *s);
  * tnn_error tnn_param_destroy(tnn_param p);
- * tnn_error tnn_param_state_sub(tnn_param *p, tnn_state *s, tnn_state *t, int offset);
+ * tnn_error tnn_param_state_sub(tnn_param *p, tnn_state *s, tnn_state *t, size_t offset);
  * tnn_error tnn_param_debug(tnn_param *p);
  */
 
+#include <stddef.h>
 #include <stdbool.h>
 #include <gsl/gsl_vector.h>
 #include <utlist.h>
@@ -35,7 +36,7 @@ tnn_error tnn_param_state_alloc(tnn_param *p, tnn_state *s){
   gsl_vector_view dxv;
   tnn_state *elt;
   tnn_state *tmp;
-  int i, size;
+  size_t i, size;
 
   //Routine check
   if(s->valid == true){
@@ -89,7 +90,7 @@ tnn_error tnn_param_state_calloc(tnn_param *p, tnn_state *s){
   gsl_vector_view dxv;
   tnn_state *elt;
   tnn_state *tmp;
-  int i, size;
+  size_t i, size;
 
   //Routine check
   if(s->valid == true){
@@ -160,7 +161,7 @@ tnn_error tnn_param_destroy(tnn_param *p){
 }
 
 //Get sub state vectors, using t's size.
-tnn_error tnn_param_state_sub(tnn_param *p, tnn_state *s, tnn_state *t, int offset){
+tnn_error tnn_param_state_sub(tnn_param *p, tnn_state *s, tnn_state *t, size_t offset){
   gsl_vector_view xv;
   gsl_vector_view dxv;
   tnn_state *elt, *tmp;
@@ -197,9 +198,9 @@ tnn_error tnn_param_state_sub(tnn_param *p, tnn_state *s, tnn_state *t, int offs
 
 //Debug info from paramters
 tnn_error tnn_param_debug(tnn_param *p){
-  int i;
+  size_t i;
   tnn_state *elt, *tmp;
-  printf("paramter = %p, size = %d, x = %p, dx = %p, states = %p\n", p, p->size, p->x, p->dx, p->states);
+  printf("paramter = %p, size = %ld, x = %p, dx = %p, states = %p\n", p, p->size, p->x, p->dx, p->states);
   if(p->size > 0){
     printf("x:");
     for(i = 0; i < p->size; i = i + 1){

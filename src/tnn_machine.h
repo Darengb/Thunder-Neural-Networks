@@ -7,7 +7,7 @@
  *             tnn_module min, tnn_module mout)
  *
  * This header defines the following functions:
- * tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput);
+ * tnn_error tnn_machine_init(tnn_machine *m, size_t ninput, size_t noutput);
  * tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param **p);
  * tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param **io);
  * tnn_error tnn_machine_state_alloc(tnn_machine *m, tnn_state *s);
@@ -25,6 +25,7 @@
  * tnn_error tnn_machine_debug(tnn_machine *m);
  */
 
+#include <stddef.h>
 #include <tnn_error.h>
 #include <tnn_state.h>
 #include <tnn_param.h>
@@ -59,7 +60,7 @@ typedef struct __STRUCT_tnn_machine{
 } tnn_machine;
 
 //Initialize the machine with designated input and output size
-tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput);
+tnn_error tnn_machine_init(tnn_machine *m, size_t ninput, size_t noutput);
 
 //Get the parameter of this machine
 tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param **p);

@@ -3,7 +3,7 @@
  * Version 0.1, 02/25/2012
  *
  * This source implements the following functions:
- * tnn_error tnn_numeric_v2m(gsl_vector *v, gsl_matrix *m, int size1, int size2);
+ * tnn_error tnn_numeric_v2m(gsl_vector *v, gsl_matrix *m, size_t size1, size_t size2);
  */
 
 #include <gsl/gsl_vector.h>
@@ -12,7 +12,7 @@
 #include <tnn_error.h>
 
 //Vector to matrix conversion
-tnn_error tnn_numeric_v2m(gsl_vector *v, gsl_matrix *m, int size1, int size2){
+tnn_error tnn_numeric_v2m(gsl_vector *v, gsl_matrix *m, size_t size1, size_t size2){
   if(v->stride != 1 || size1*size2 != v->size){
     return TNN_ERROR_NUMERIC_INCOMP;
   }

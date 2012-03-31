@@ -3,7 +3,7 @@
  * Version 0.1, 03/25/2012
  *
  * This source implements the following functions:
- * tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput);
+ * tnn_error tnn_machine_init(tnn_machine *m, size_t ninput, size_t noutput);
  * tnn_error tnn_machine_get_param(tnn_machine *m, tnn_param **p);
  * tnn_error tnn_machine_get_io(tnn_machine *m, tnn_param **io);
  * tnn_error tnn_machine_state_alloc(tnn_machine *m, tnn_state *s);
@@ -21,6 +21,7 @@
  * tnn_error tnn_machine_debug(tnn_machine *m);
  */
 
+#include <stddef.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <tnn_error.h>
@@ -31,7 +32,7 @@
 #include <utlist.h>
 
 //Initialize the machine with designated input and output size
-tnn_error tnn_machine_init(tnn_machine *m, int ninput, int noutput){
+tnn_error tnn_machine_init(tnn_machine *m, size_t ninput, size_t noutput){
   tnn_error ret;
 
   //Initialize input and output

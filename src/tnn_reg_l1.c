@@ -10,6 +10,7 @@
  * tnn_error tnn_reg_destroy_l1(tnn_reg *r);
  */
 
+#include <stddef.h>
 #include <tnn_error.h>
 #include <tnn_reg.h>
 #include <tnn_reg_l1.h>
@@ -40,7 +41,7 @@ tnn_error tnn_reg_l_l1(tnn_reg *r, gsl_vector *w, double *l){
 }
 
 tnn_error tnn_reg_d_l1(tnn_reg *r, gsl_vector *w, gsl_vector *d){
-  int i;
+  size_t i;
 
   //Routine check
   if(w->size != d->size){

@@ -6,10 +6,11 @@
  * tnn_state(gsl_vector w, gsl_vector dw, int size, bool valid)
  *
  * This header also declares the following functions:
- * tnn_error tnn_state_init(tnn_state *s, int n);
+ * tnn_error tnn_state_init(tnn_state *s, size_t n);
  * tnn_error tnn_state_debug(tnn_state *s);
  */
 
+#include <stddef.h>
 #include <stdbool.h>
 #include <gsl/gsl_vector.h>
 #include <tnn_error.h>
@@ -23,7 +24,7 @@ typedef struct __STRUCT_tnn_state{
   //The state gradients
   gsl_vector dx;
   //The size of this state
-  int size;
+  size_t size;
   //Validity flag
   bool valid;
 
@@ -34,7 +35,7 @@ typedef struct __STRUCT_tnn_state{
 
 //Initialize the state s into size n and invalid state
 //State can only be allocated to tnn_param
-tnn_error tnn_state_init(tnn_state *s, int n);
+tnn_error tnn_state_init(tnn_state *s, size_t n);
 
 //Print debug information
 tnn_error tnn_state_debug(tnn_state *s);

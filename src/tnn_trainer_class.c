@@ -32,7 +32,7 @@ tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t 
   tnn_error ret;
   tnn_state *sin;
   gsl_vector_view v;
-  int i;
+  size_t i;
 
   //Get the machine's input state
   if((ret = tnn_machine_get_sin(&t->m, &sin)) != TNN_ERROR_SUCCESS){
@@ -107,7 +107,7 @@ tnn_error tnn_trainer_class_test(tnn_trainer_class *t, gsl_matrix *inputs, size_
   size_t lb;
   double ls;
   tnn_error ret;
-  int i;
+  size_t i;
 
   *loss = 0;
   *error = 0;

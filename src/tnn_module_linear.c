@@ -11,6 +11,7 @@
  * tnn_error tnn_module_debug(tnn_module *m);
  */
 
+#include <stddef.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
@@ -116,7 +117,7 @@ tnn_error tnn_module_fprop_linear(tnn_module *m){
 
 tnn_error tnn_module_randomize_linear(tnn_module *m, double k){
   double z;
-  int i;
+  size_t i;
 
   //Routine check
   if(m->t != TNN_MODULE_TYPE_LINEAR){
