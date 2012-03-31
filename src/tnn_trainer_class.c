@@ -71,15 +71,12 @@ tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t 
     if((ret = tnn_loss_fprop(&t->l)) != TNN_ERROR_SUCCESS){
       return ret;
     }
-    gsl_vector_set(t->losses, i, -gsl_vector_get(&t->l.output->x, 0));
+    gsl_vector_set(t->losses, i, gsl_vector_get(&t->l.output->x, 0));
   }
 
   //Find the label with the smallest loss
-  *label = gsl_blas_idamax(t->losses);
-  *loss = -gsl_vector_get(t->losses, *label);
-
-  //Recover the loss to positive
-  gsl_blas_dscal(-1.0, t->losses);
+  *label = gsl_vector_min_index(t->losses);
+  *loss = gsl_vector_get(t->losses, *label);
 
   return TNN_ERROR_SUCCESS;
 }
@@ -119,7 +116,7 @@ tnn_error tnn_trainer_class_test(tnn_trainer_class *t, gsl_matrix *inputs, size_
     if((ret = tnn_trainer_class_run(t, &input.vector, &lb, &ls)) != TNN_ERROR_SUCCESS){
       return ret;
     }
-    if(lb == labels[i]){
+    if(lb != labels[i]){
       *error = *error + 1.0;
     }
     *loss = *loss + ls;

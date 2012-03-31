@@ -36,6 +36,7 @@
 
 //Trainer types
 typedef enum __ENUM_tnn_trainer_class_type{
+  TNN_TRAINER_CLASS_TYPE_NONE, //Nothing..
   TNN_TRAINER_CLASS_TYPE_NSGD, //Naive stochastic gradient descent classification trainer
   TNN_TRAINER_CLASS_TYPE_TSGD, //Threaded stochastic gradient descent classification trainer
 

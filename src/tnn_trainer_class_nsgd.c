@@ -97,6 +97,9 @@ tnn_error tnn_trainer_class_learn_nsgd(tnn_trainer_class *t, gsl_vector *input, 
   }
   lb = gsl_matrix_row(t->lset, label);
 
+  //Set the loss output dx to be 1
+  gsl_vector_set(&t->l.output->dx, 0, 1.0);
+
   //Copy the data into the input/label and do forward and backward propagation
   TNN_MACRO_GSLTEST(gsl_blas_dcopy(input, &sin->x));
   TNN_MACRO_GSLTEST(gsl_blas_dcopy(&lb.vector, &t->label.x));
@@ -137,9 +140,12 @@ tnn_error tnn_trainer_class_train_nsgd(tnn_trainer_class *t, gsl_matrix *inputs,
 
   //Check the input
   TNN_MACRO_ERRORTEST(tnn_machine_get_sin(&t->m, &sin),ret);
-  if(inputs->size1 != sin->size){
+  if(inputs->size2 != sin->size){
     return TNN_ERROR_STATE_INCOMP;
   }
+
+  //Set the loss output dx to be 1
+  gsl_vector_set(&t->l.output->dx, 0, 1.0);
 
   //Get the parameter and allocate rd and pw
   TNN_MACRO_ERRORTEST(tnn_machine_get_param(&t->m, &p), ret);

@@ -64,9 +64,9 @@ int main(){
   printf("Test l2 add loss: %s\n", TEST_FUNC(tnn_reg_addl(&l2, w, &l)));
   printf("%g\n", l);
 
-  printf("Test l1 add derivatives: %s\n", TEST_FUNC(tnn_reg_addd(&l1, w, d)));
+  printf("Test l1 add derivatives: %s\n", TEST_FUNC(tnn_reg_addd(&l1, w, d, 0.5)));
   printVector(d);
-  printf("Test l2 add derivatives: %s\n", TEST_FUNC(tnn_reg_addd(&l2, w, d)));
+  printf("Test l2 add derivatives: %s\n", TEST_FUNC(tnn_reg_addd(&l2, w, d, 0.5)));
   printVector(d);
 
   printf("Destroying l1 regularizer: %s\n", TEST_FUNC(tnn_reg_destroy(&l1)));
