@@ -1,1 +1,2 @@
 SUBDIRS = tnn
+ACLOCAL_AMFLAGS = -I m4

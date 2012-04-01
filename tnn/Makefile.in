@@ -33,11 +33,16 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+build_triplet = @build@
+host_triplet = @host@
 subdir = tnn
 DIST_COMMON = $(pkginclude_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/tnn_config.h.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -66,39 +71,41 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgincludedir)"
-LIBRARIES = $(lib_LIBRARIES)
-AR = ar
-ARFLAGS = cru
-libtnn_a_AR = $(AR) $(ARFLAGS)
-libtnn_a_LIBADD =
-am_libtnn_a_OBJECTS = libtnn_a-tnn_loss.$(OBJEXT) \
-	libtnn_a-tnn_machine.$(OBJEXT) libtnn_a-tnn_module.$(OBJEXT) \
-	libtnn_a-tnn_numeric.$(OBJEXT) libtnn_a-tnn_reg.$(OBJEXT) \
-	libtnn_a-tnn_reg_l2.$(OBJEXT) \
-	libtnn_a-tnn_trainer_class.$(OBJEXT) \
-	libtnn_a-tnn_loss_euclidean.$(OBJEXT) \
-	libtnn_a-tnn_module_bias.$(OBJEXT) \
-	libtnn_a-tnn_module_linear.$(OBJEXT) \
-	libtnn_a-tnn_param.$(OBJEXT) libtnn_a-tnn_reg_l1.$(OBJEXT) \
-	libtnn_a-tnn_state.$(OBJEXT) \
-	libtnn_a-tnn_trainer_class_nsgd.$(OBJEXT)
-libtnn_a_OBJECTS = $(am_libtnn_a_OBJECTS)
+LTLIBRARIES = $(lib_LTLIBRARIES)
+libtnn_la_LIBADD =
+am_libtnn_la_OBJECTS = libtnn_la-tnn_loss.lo libtnn_la-tnn_machine.lo \
+	libtnn_la-tnn_module.lo libtnn_la-tnn_numeric.lo \
+	libtnn_la-tnn_reg.lo libtnn_la-tnn_reg_l2.lo \
+	libtnn_la-tnn_trainer_class.lo libtnn_la-tnn_loss_euclidean.lo \
+	libtnn_la-tnn_module_bias.lo libtnn_la-tnn_module_linear.lo \
+	libtnn_la-tnn_param.lo libtnn_la-tnn_reg_l1.lo \
+	libtnn_la-tnn_state.lo libtnn_la-tnn_trainer_class_nsgd.lo
+libtnn_la_OBJECTS = $(am_libtnn_la_OBJECTS)
+libtnn_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libtnn_la_CFLAGS) \
+	$(CFLAGS) $(libtnn_la_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libtnn_a_SOURCES)
-DIST_SOURCES = $(libtnn_a_SOURCES)
+LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
+SOURCES = $(libtnn_la_SOURCES)
+DIST_SOURCES = $(libtnn_la_SOURCES)
 HEADERS = $(pkginclude_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
+AR = @AR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -106,26 +113,43 @@ AWK = @AWK@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
+CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DLLTOOL = @DLLTOOL@
+DSYMUTIL = @DSYMUTIL@
+DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+FGREP = @FGREP@
+GREP = @GREP@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
+LIBTOOL = @LIBTOOL@
+LIPO = @LIPO@
+LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
+NM = @NM@
+NMEDIT = @NMEDIT@
+OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
+OTOOL = @OTOOL@
+OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -135,6 +159,7 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -143,21 +168,31 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
+ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
 bindir = @bindir@
+build = @build@
 build_alias = @build_alias@
+build_cpu = @build_cpu@
+build_os = @build_os@
+build_vendor = @build_vendor@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+host = @host@
 host_alias = @host_alias@
+host_cpu = @host_cpu@
+host_os = @host_os@
+host_vendor = @host_vendor@
 htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
@@ -181,15 +216,16 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-pkginclude_HEADERS = tnn_error.h tnn_loss_euclidean.h tnn_loss.h tnn_machine.h tnn_macro.h tnn_module_bias.h tnn_module.h tnn_module_linear.h tnn_numeric.h tnn_param.h tnn_reg.h tnn_reg_l1.h tnn_reg_l2.h tnn_state.h tnn_trainer_class.h tnn_trainer_class_nsgd.h
-lib_LIBRARIES = libtnn.a
-libtnn_a_SOURCES = tnn_loss.c tnn_machine.c tnn_module.c tnn_numeric.c tnn_reg.c tnn_reg_l2.c tnn_trainer_class.c tnn_loss_euclidean.c tnn_module_bias.c tnn_module_linear.c tnn_param.c tnn_reg_l1.c tnn_state.c tnn_trainer_class_nsgd.c
-libtnn_a_CFLAGS = -I$(top_srcdir)
+pkginclude_HEADERS = tnn_error.h tnn_config.h tnn_loss_euclidean.h tnn_loss.h tnn_machine.h tnn_macro.h tnn_module_bias.h tnn_module.h tnn_module_linear.h tnn_numeric.h tnn_param.h tnn_reg.h tnn_reg_l1.h tnn_reg_l2.h tnn_state.h tnn_trainer_class.h tnn_trainer_class_nsgd.h
+lib_LTLIBRARIES = libtnn.la
+libtnn_la_SOURCES = tnn_loss.c tnn_machine.c tnn_module.c tnn_numeric.c tnn_reg.c tnn_reg_l2.c tnn_trainer_class.c tnn_loss_euclidean.c tnn_module_bias.c tnn_module_linear.c tnn_param.c tnn_reg_l1.c tnn_state.c tnn_trainer_class_nsgd.c
+libtnn_la_CFLAGS = -I$(top_srcdir)
+libtnn_la_LDFLAGS = -version-info 0:0:0
 all: tnn_config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .o .obj
+.SUFFIXES: .c .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -237,42 +273,39 @@ $(srcdir)/tnn_config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f tnn_config.h stamp-h1
-install-libLIBRARIES: $(lib_LIBRARIES)
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
 	list2=; for p in $$list; do \
 	  if test -f $$p; then \
 	    list2="$$list2 $$p"; \
 	  else :; fi; \
 	done; \
 	test -z "$$list2" || { \
-	  echo " $(INSTALL_DATA) $$list2 '$(DESTDIR)$(libdir)'"; \
-	  $(INSTALL_DATA) $$list2 "$(DESTDIR)$(libdir)" || exit $$?; }
-	@$(POST_INSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libdir)'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libdir)"; \
+	}
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
 	for p in $$list; do \
-	  if test -f $$p; then \
-	    $(am__strip_dir) \
-	    echo " ( cd '$(DESTDIR)$(libdir)' && $(RANLIB) $$f )"; \
-	    ( cd "$(DESTDIR)$(libdir)" && $(RANLIB) $$f ) || exit $$?; \
-	  else :; fi; \
+	  $(am__strip_dir) \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$f'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$f"; \
 	done
 
-uninstall-libLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(libdir)' && rm -f "$$files" )"; \
-	cd "$(DESTDIR)$(libdir)" && rm -f $$files
-
-clean-libLIBRARIES:
-	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
-libtnn.a: $(libtnn_a_OBJECTS) $(libtnn_a_DEPENDENCIES) 
-	-rm -f libtnn.a
-	$(libtnn_a_AR) libtnn.a $(libtnn_a_OBJECTS) $(libtnn_a_LIBADD)
-	$(RANLIB) libtnn.a
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
+	done
+libtnn.la: $(libtnn_la_OBJECTS) $(libtnn_la_DEPENDENCIES) 
+	$(libtnn_la_LINK) -rpath $(libdir) $(libtnn_la_OBJECTS) $(libtnn_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -280,20 +313,20 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_loss.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_loss_euclidean.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_machine.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_module.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_module_bias.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_module_linear.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_numeric.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_param.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_reg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_reg_l1.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_reg_l2.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_state.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_trainer_class.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_a-tnn_trainer_class_nsgd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_loss.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_loss_euclidean.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_machine.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_module.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_module_bias.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_module_linear.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_numeric.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_param.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_reg.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_reg_l1.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_reg_l2.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_state.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_trainer_class.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_trainer_class_nsgd.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -309,201 +342,116 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
 
-libtnn_a-tnn_loss.o: tnn_loss.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_loss.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_loss.Tpo -c -o libtnn_a-tnn_loss.o `test -f 'tnn_loss.c' || echo '$(srcdir)/'`tnn_loss.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_loss.Tpo $(DEPDIR)/libtnn_a-tnn_loss.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_loss.c' object='libtnn_a-tnn_loss.o' libtool=no @AMDEPBACKSLASH@
+.c.lo:
+@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_loss.o `test -f 'tnn_loss.c' || echo '$(srcdir)/'`tnn_loss.c
+@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
-libtnn_a-tnn_loss.obj: tnn_loss.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_loss.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_loss.Tpo -c -o libtnn_a-tnn_loss.obj `if test -f 'tnn_loss.c'; then $(CYGPATH_W) 'tnn_loss.c'; else $(CYGPATH_W) '$(srcdir)/tnn_loss.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_loss.Tpo $(DEPDIR)/libtnn_a-tnn_loss.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_loss.c' object='libtnn_a-tnn_loss.obj' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_loss.lo: tnn_loss.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_loss.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_loss.Tpo -c -o libtnn_la-tnn_loss.lo `test -f 'tnn_loss.c' || echo '$(srcdir)/'`tnn_loss.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_loss.Tpo $(DEPDIR)/libtnn_la-tnn_loss.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_loss.c' object='libtnn_la-tnn_loss.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_loss.obj `if test -f 'tnn_loss.c'; then $(CYGPATH_W) 'tnn_loss.c'; else $(CYGPATH_W) '$(srcdir)/tnn_loss.c'; fi`
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_loss.lo `test -f 'tnn_loss.c' || echo '$(srcdir)/'`tnn_loss.c
 
-libtnn_a-tnn_machine.o: tnn_machine.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_machine.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_machine.Tpo -c -o libtnn_a-tnn_machine.o `test -f 'tnn_machine.c' || echo '$(srcdir)/'`tnn_machine.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_machine.Tpo $(DEPDIR)/libtnn_a-tnn_machine.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_machine.c' object='libtnn_a-tnn_machine.o' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_machine.lo: tnn_machine.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_machine.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_machine.Tpo -c -o libtnn_la-tnn_machine.lo `test -f 'tnn_machine.c' || echo '$(srcdir)/'`tnn_machine.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_machine.Tpo $(DEPDIR)/libtnn_la-tnn_machine.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_machine.c' object='libtnn_la-tnn_machine.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_machine.o `test -f 'tnn_machine.c' || echo '$(srcdir)/'`tnn_machine.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_machine.lo `test -f 'tnn_machine.c' || echo '$(srcdir)/'`tnn_machine.c
 
-libtnn_a-tnn_machine.obj: tnn_machine.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_machine.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_machine.Tpo -c -o libtnn_a-tnn_machine.obj `if test -f 'tnn_machine.c'; then $(CYGPATH_W) 'tnn_machine.c'; else $(CYGPATH_W) '$(srcdir)/tnn_machine.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_machine.Tpo $(DEPDIR)/libtnn_a-tnn_machine.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_machine.c' object='libtnn_a-tnn_machine.obj' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_module.lo: tnn_module.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_module.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_module.Tpo -c -o libtnn_la-tnn_module.lo `test -f 'tnn_module.c' || echo '$(srcdir)/'`tnn_module.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_module.Tpo $(DEPDIR)/libtnn_la-tnn_module.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module.c' object='libtnn_la-tnn_module.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_machine.obj `if test -f 'tnn_machine.c'; then $(CYGPATH_W) 'tnn_machine.c'; else $(CYGPATH_W) '$(srcdir)/tnn_machine.c'; fi`
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_module.lo `test -f 'tnn_module.c' || echo '$(srcdir)/'`tnn_module.c
 
-libtnn_a-tnn_module.o: tnn_module.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_module.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_module.Tpo -c -o libtnn_a-tnn_module.o `test -f 'tnn_module.c' || echo '$(srcdir)/'`tnn_module.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_module.Tpo $(DEPDIR)/libtnn_a-tnn_module.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module.c' object='libtnn_a-tnn_module.o' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_numeric.lo: tnn_numeric.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_numeric.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_numeric.Tpo -c -o libtnn_la-tnn_numeric.lo `test -f 'tnn_numeric.c' || echo '$(srcdir)/'`tnn_numeric.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_numeric.Tpo $(DEPDIR)/libtnn_la-tnn_numeric.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_numeric.c' object='libtnn_la-tnn_numeric.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_module.o `test -f 'tnn_module.c' || echo '$(srcdir)/'`tnn_module.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_numeric.lo `test -f 'tnn_numeric.c' || echo '$(srcdir)/'`tnn_numeric.c
 
-libtnn_a-tnn_module.obj: tnn_module.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_module.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_module.Tpo -c -o libtnn_a-tnn_module.obj `if test -f 'tnn_module.c'; then $(CYGPATH_W) 'tnn_module.c'; else $(CYGPATH_W) '$(srcdir)/tnn_module.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_module.Tpo $(DEPDIR)/libtnn_a-tnn_module.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module.c' object='libtnn_a-tnn_module.obj' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_reg.lo: tnn_reg.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_reg.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_reg.Tpo -c -o libtnn_la-tnn_reg.lo `test -f 'tnn_reg.c' || echo '$(srcdir)/'`tnn_reg.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_reg.Tpo $(DEPDIR)/libtnn_la-tnn_reg.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_reg.c' object='libtnn_la-tnn_reg.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_module.obj `if test -f 'tnn_module.c'; then $(CYGPATH_W) 'tnn_module.c'; else $(CYGPATH_W) '$(srcdir)/tnn_module.c'; fi`
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_reg.lo `test -f 'tnn_reg.c' || echo '$(srcdir)/'`tnn_reg.c
 
-libtnn_a-tnn_numeric.o: tnn_numeric.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_numeric.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_numeric.Tpo -c -o libtnn_a-tnn_numeric.o `test -f 'tnn_numeric.c' || echo '$(srcdir)/'`tnn_numeric.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_numeric.Tpo $(DEPDIR)/libtnn_a-tnn_numeric.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_numeric.c' object='libtnn_a-tnn_numeric.o' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_reg_l2.lo: tnn_reg_l2.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_reg_l2.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_reg_l2.Tpo -c -o libtnn_la-tnn_reg_l2.lo `test -f 'tnn_reg_l2.c' || echo '$(srcdir)/'`tnn_reg_l2.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_reg_l2.Tpo $(DEPDIR)/libtnn_la-tnn_reg_l2.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_reg_l2.c' object='libtnn_la-tnn_reg_l2.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_numeric.o `test -f 'tnn_numeric.c' || echo '$(srcdir)/'`tnn_numeric.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_reg_l2.lo `test -f 'tnn_reg_l2.c' || echo '$(srcdir)/'`tnn_reg_l2.c
 
-libtnn_a-tnn_numeric.obj: tnn_numeric.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_numeric.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_numeric.Tpo -c -o libtnn_a-tnn_numeric.obj `if test -f 'tnn_numeric.c'; then $(CYGPATH_W) 'tnn_numeric.c'; else $(CYGPATH_W) '$(srcdir)/tnn_numeric.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_numeric.Tpo $(DEPDIR)/libtnn_a-tnn_numeric.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_numeric.c' object='libtnn_a-tnn_numeric.obj' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_trainer_class.lo: tnn_trainer_class.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_trainer_class.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_trainer_class.Tpo -c -o libtnn_la-tnn_trainer_class.lo `test -f 'tnn_trainer_class.c' || echo '$(srcdir)/'`tnn_trainer_class.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_trainer_class.Tpo $(DEPDIR)/libtnn_la-tnn_trainer_class.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_trainer_class.c' object='libtnn_la-tnn_trainer_class.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_numeric.obj `if test -f 'tnn_numeric.c'; then $(CYGPATH_W) 'tnn_numeric.c'; else $(CYGPATH_W) '$(srcdir)/tnn_numeric.c'; fi`
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_trainer_class.lo `test -f 'tnn_trainer_class.c' || echo '$(srcdir)/'`tnn_trainer_class.c
 
-libtnn_a-tnn_reg.o: tnn_reg.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_reg.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_reg.Tpo -c -o libtnn_a-tnn_reg.o `test -f 'tnn_reg.c' || echo '$(srcdir)/'`tnn_reg.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_reg.Tpo $(DEPDIR)/libtnn_a-tnn_reg.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_reg.c' object='libtnn_a-tnn_reg.o' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_loss_euclidean.lo: tnn_loss_euclidean.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_loss_euclidean.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_loss_euclidean.Tpo -c -o libtnn_la-tnn_loss_euclidean.lo `test -f 'tnn_loss_euclidean.c' || echo '$(srcdir)/'`tnn_loss_euclidean.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_loss_euclidean.Tpo $(DEPDIR)/libtnn_la-tnn_loss_euclidean.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_loss_euclidean.c' object='libtnn_la-tnn_loss_euclidean.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_reg.o `test -f 'tnn_reg.c' || echo '$(srcdir)/'`tnn_reg.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_loss_euclidean.lo `test -f 'tnn_loss_euclidean.c' || echo '$(srcdir)/'`tnn_loss_euclidean.c
 
-libtnn_a-tnn_reg.obj: tnn_reg.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_reg.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_reg.Tpo -c -o libtnn_a-tnn_reg.obj `if test -f 'tnn_reg.c'; then $(CYGPATH_W) 'tnn_reg.c'; else $(CYGPATH_W) '$(srcdir)/tnn_reg.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_reg.Tpo $(DEPDIR)/libtnn_a-tnn_reg.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_reg.c' object='libtnn_a-tnn_reg.obj' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_module_bias.lo: tnn_module_bias.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_module_bias.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_module_bias.Tpo -c -o libtnn_la-tnn_module_bias.lo `test -f 'tnn_module_bias.c' || echo '$(srcdir)/'`tnn_module_bias.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_module_bias.Tpo $(DEPDIR)/libtnn_la-tnn_module_bias.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module_bias.c' object='libtnn_la-tnn_module_bias.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_reg.obj `if test -f 'tnn_reg.c'; then $(CYGPATH_W) 'tnn_reg.c'; else $(CYGPATH_W) '$(srcdir)/tnn_reg.c'; fi`
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_module_bias.lo `test -f 'tnn_module_bias.c' || echo '$(srcdir)/'`tnn_module_bias.c
 
-libtnn_a-tnn_reg_l2.o: tnn_reg_l2.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_reg_l2.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_reg_l2.Tpo -c -o libtnn_a-tnn_reg_l2.o `test -f 'tnn_reg_l2.c' || echo '$(srcdir)/'`tnn_reg_l2.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_reg_l2.Tpo $(DEPDIR)/libtnn_a-tnn_reg_l2.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_reg_l2.c' object='libtnn_a-tnn_reg_l2.o' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_module_linear.lo: tnn_module_linear.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_module_linear.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_module_linear.Tpo -c -o libtnn_la-tnn_module_linear.lo `test -f 'tnn_module_linear.c' || echo '$(srcdir)/'`tnn_module_linear.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_module_linear.Tpo $(DEPDIR)/libtnn_la-tnn_module_linear.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module_linear.c' object='libtnn_la-tnn_module_linear.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_reg_l2.o `test -f 'tnn_reg_l2.c' || echo '$(srcdir)/'`tnn_reg_l2.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_module_linear.lo `test -f 'tnn_module_linear.c' || echo '$(srcdir)/'`tnn_module_linear.c
 
-libtnn_a-tnn_reg_l2.obj: tnn_reg_l2.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_reg_l2.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_reg_l2.Tpo -c -o libtnn_a-tnn_reg_l2.obj `if test -f 'tnn_reg_l2.c'; then $(CYGPATH_W) 'tnn_reg_l2.c'; else $(CYGPATH_W) '$(srcdir)/tnn_reg_l2.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_reg_l2.Tpo $(DEPDIR)/libtnn_a-tnn_reg_l2.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_reg_l2.c' object='libtnn_a-tnn_reg_l2.obj' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_param.lo: tnn_param.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_param.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_param.Tpo -c -o libtnn_la-tnn_param.lo `test -f 'tnn_param.c' || echo '$(srcdir)/'`tnn_param.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_param.Tpo $(DEPDIR)/libtnn_la-tnn_param.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_param.c' object='libtnn_la-tnn_param.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_reg_l2.obj `if test -f 'tnn_reg_l2.c'; then $(CYGPATH_W) 'tnn_reg_l2.c'; else $(CYGPATH_W) '$(srcdir)/tnn_reg_l2.c'; fi`
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_param.lo `test -f 'tnn_param.c' || echo '$(srcdir)/'`tnn_param.c
 
-libtnn_a-tnn_trainer_class.o: tnn_trainer_class.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_trainer_class.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_trainer_class.Tpo -c -o libtnn_a-tnn_trainer_class.o `test -f 'tnn_trainer_class.c' || echo '$(srcdir)/'`tnn_trainer_class.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_trainer_class.Tpo $(DEPDIR)/libtnn_a-tnn_trainer_class.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_trainer_class.c' object='libtnn_a-tnn_trainer_class.o' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_reg_l1.lo: tnn_reg_l1.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_reg_l1.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_reg_l1.Tpo -c -o libtnn_la-tnn_reg_l1.lo `test -f 'tnn_reg_l1.c' || echo '$(srcdir)/'`tnn_reg_l1.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_reg_l1.Tpo $(DEPDIR)/libtnn_la-tnn_reg_l1.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_reg_l1.c' object='libtnn_la-tnn_reg_l1.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_trainer_class.o `test -f 'tnn_trainer_class.c' || echo '$(srcdir)/'`tnn_trainer_class.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_reg_l1.lo `test -f 'tnn_reg_l1.c' || echo '$(srcdir)/'`tnn_reg_l1.c
 
-libtnn_a-tnn_trainer_class.obj: tnn_trainer_class.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_trainer_class.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_trainer_class.Tpo -c -o libtnn_a-tnn_trainer_class.obj `if test -f 'tnn_trainer_class.c'; then $(CYGPATH_W) 'tnn_trainer_class.c'; else $(CYGPATH_W) '$(srcdir)/tnn_trainer_class.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_trainer_class.Tpo $(DEPDIR)/libtnn_a-tnn_trainer_class.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_trainer_class.c' object='libtnn_a-tnn_trainer_class.obj' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_state.lo: tnn_state.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_state.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_state.Tpo -c -o libtnn_la-tnn_state.lo `test -f 'tnn_state.c' || echo '$(srcdir)/'`tnn_state.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_state.Tpo $(DEPDIR)/libtnn_la-tnn_state.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_state.c' object='libtnn_la-tnn_state.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_trainer_class.obj `if test -f 'tnn_trainer_class.c'; then $(CYGPATH_W) 'tnn_trainer_class.c'; else $(CYGPATH_W) '$(srcdir)/tnn_trainer_class.c'; fi`
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_state.lo `test -f 'tnn_state.c' || echo '$(srcdir)/'`tnn_state.c
 
-libtnn_a-tnn_loss_euclidean.o: tnn_loss_euclidean.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_loss_euclidean.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_loss_euclidean.Tpo -c -o libtnn_a-tnn_loss_euclidean.o `test -f 'tnn_loss_euclidean.c' || echo '$(srcdir)/'`tnn_loss_euclidean.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_loss_euclidean.Tpo $(DEPDIR)/libtnn_a-tnn_loss_euclidean.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_loss_euclidean.c' object='libtnn_a-tnn_loss_euclidean.o' libtool=no @AMDEPBACKSLASH@
+libtnn_la-tnn_trainer_class_nsgd.lo: tnn_trainer_class_nsgd.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_trainer_class_nsgd.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_trainer_class_nsgd.Tpo -c -o libtnn_la-tnn_trainer_class_nsgd.lo `test -f 'tnn_trainer_class_nsgd.c' || echo '$(srcdir)/'`tnn_trainer_class_nsgd.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_trainer_class_nsgd.Tpo $(DEPDIR)/libtnn_la-tnn_trainer_class_nsgd.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_trainer_class_nsgd.c' object='libtnn_la-tnn_trainer_class_nsgd.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_loss_euclidean.o `test -f 'tnn_loss_euclidean.c' || echo '$(srcdir)/'`tnn_loss_euclidean.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_trainer_class_nsgd.lo `test -f 'tnn_trainer_class_nsgd.c' || echo '$(srcdir)/'`tnn_trainer_class_nsgd.c
 
-libtnn_a-tnn_loss_euclidean.obj: tnn_loss_euclidean.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_loss_euclidean.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_loss_euclidean.Tpo -c -o libtnn_a-tnn_loss_euclidean.obj `if test -f 'tnn_loss_euclidean.c'; then $(CYGPATH_W) 'tnn_loss_euclidean.c'; else $(CYGPATH_W) '$(srcdir)/tnn_loss_euclidean.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_loss_euclidean.Tpo $(DEPDIR)/libtnn_a-tnn_loss_euclidean.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_loss_euclidean.c' object='libtnn_a-tnn_loss_euclidean.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_loss_euclidean.obj `if test -f 'tnn_loss_euclidean.c'; then $(CYGPATH_W) 'tnn_loss_euclidean.c'; else $(CYGPATH_W) '$(srcdir)/tnn_loss_euclidean.c'; fi`
+mostlyclean-libtool:
+	-rm -f *.lo
 
-libtnn_a-tnn_module_bias.o: tnn_module_bias.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_module_bias.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_module_bias.Tpo -c -o libtnn_a-tnn_module_bias.o `test -f 'tnn_module_bias.c' || echo '$(srcdir)/'`tnn_module_bias.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_module_bias.Tpo $(DEPDIR)/libtnn_a-tnn_module_bias.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module_bias.c' object='libtnn_a-tnn_module_bias.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_module_bias.o `test -f 'tnn_module_bias.c' || echo '$(srcdir)/'`tnn_module_bias.c
-
-libtnn_a-tnn_module_bias.obj: tnn_module_bias.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_module_bias.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_module_bias.Tpo -c -o libtnn_a-tnn_module_bias.obj `if test -f 'tnn_module_bias.c'; then $(CYGPATH_W) 'tnn_module_bias.c'; else $(CYGPATH_W) '$(srcdir)/tnn_module_bias.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_module_bias.Tpo $(DEPDIR)/libtnn_a-tnn_module_bias.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module_bias.c' object='libtnn_a-tnn_module_bias.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_module_bias.obj `if test -f 'tnn_module_bias.c'; then $(CYGPATH_W) 'tnn_module_bias.c'; else $(CYGPATH_W) '$(srcdir)/tnn_module_bias.c'; fi`
-
-libtnn_a-tnn_module_linear.o: tnn_module_linear.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_module_linear.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_module_linear.Tpo -c -o libtnn_a-tnn_module_linear.o `test -f 'tnn_module_linear.c' || echo '$(srcdir)/'`tnn_module_linear.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_module_linear.Tpo $(DEPDIR)/libtnn_a-tnn_module_linear.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module_linear.c' object='libtnn_a-tnn_module_linear.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_module_linear.o `test -f 'tnn_module_linear.c' || echo '$(srcdir)/'`tnn_module_linear.c
-
-libtnn_a-tnn_module_linear.obj: tnn_module_linear.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_module_linear.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_module_linear.Tpo -c -o libtnn_a-tnn_module_linear.obj `if test -f 'tnn_module_linear.c'; then $(CYGPATH_W) 'tnn_module_linear.c'; else $(CYGPATH_W) '$(srcdir)/tnn_module_linear.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_module_linear.Tpo $(DEPDIR)/libtnn_a-tnn_module_linear.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module_linear.c' object='libtnn_a-tnn_module_linear.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_module_linear.obj `if test -f 'tnn_module_linear.c'; then $(CYGPATH_W) 'tnn_module_linear.c'; else $(CYGPATH_W) '$(srcdir)/tnn_module_linear.c'; fi`
-
-libtnn_a-tnn_param.o: tnn_param.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_param.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_param.Tpo -c -o libtnn_a-tnn_param.o `test -f 'tnn_param.c' || echo '$(srcdir)/'`tnn_param.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_param.Tpo $(DEPDIR)/libtnn_a-tnn_param.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_param.c' object='libtnn_a-tnn_param.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_param.o `test -f 'tnn_param.c' || echo '$(srcdir)/'`tnn_param.c
-
-libtnn_a-tnn_param.obj: tnn_param.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_param.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_param.Tpo -c -o libtnn_a-tnn_param.obj `if test -f 'tnn_param.c'; then $(CYGPATH_W) 'tnn_param.c'; else $(CYGPATH_W) '$(srcdir)/tnn_param.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_param.Tpo $(DEPDIR)/libtnn_a-tnn_param.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_param.c' object='libtnn_a-tnn_param.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_param.obj `if test -f 'tnn_param.c'; then $(CYGPATH_W) 'tnn_param.c'; else $(CYGPATH_W) '$(srcdir)/tnn_param.c'; fi`
-
-libtnn_a-tnn_reg_l1.o: tnn_reg_l1.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_reg_l1.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_reg_l1.Tpo -c -o libtnn_a-tnn_reg_l1.o `test -f 'tnn_reg_l1.c' || echo '$(srcdir)/'`tnn_reg_l1.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_reg_l1.Tpo $(DEPDIR)/libtnn_a-tnn_reg_l1.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_reg_l1.c' object='libtnn_a-tnn_reg_l1.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_reg_l1.o `test -f 'tnn_reg_l1.c' || echo '$(srcdir)/'`tnn_reg_l1.c
-
-libtnn_a-tnn_reg_l1.obj: tnn_reg_l1.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_reg_l1.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_reg_l1.Tpo -c -o libtnn_a-tnn_reg_l1.obj `if test -f 'tnn_reg_l1.c'; then $(CYGPATH_W) 'tnn_reg_l1.c'; else $(CYGPATH_W) '$(srcdir)/tnn_reg_l1.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_reg_l1.Tpo $(DEPDIR)/libtnn_a-tnn_reg_l1.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_reg_l1.c' object='libtnn_a-tnn_reg_l1.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_reg_l1.obj `if test -f 'tnn_reg_l1.c'; then $(CYGPATH_W) 'tnn_reg_l1.c'; else $(CYGPATH_W) '$(srcdir)/tnn_reg_l1.c'; fi`
-
-libtnn_a-tnn_state.o: tnn_state.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_state.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_state.Tpo -c -o libtnn_a-tnn_state.o `test -f 'tnn_state.c' || echo '$(srcdir)/'`tnn_state.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_state.Tpo $(DEPDIR)/libtnn_a-tnn_state.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_state.c' object='libtnn_a-tnn_state.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_state.o `test -f 'tnn_state.c' || echo '$(srcdir)/'`tnn_state.c
-
-libtnn_a-tnn_state.obj: tnn_state.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_state.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_state.Tpo -c -o libtnn_a-tnn_state.obj `if test -f 'tnn_state.c'; then $(CYGPATH_W) 'tnn_state.c'; else $(CYGPATH_W) '$(srcdir)/tnn_state.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_state.Tpo $(DEPDIR)/libtnn_a-tnn_state.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_state.c' object='libtnn_a-tnn_state.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_state.obj `if test -f 'tnn_state.c'; then $(CYGPATH_W) 'tnn_state.c'; else $(CYGPATH_W) '$(srcdir)/tnn_state.c'; fi`
-
-libtnn_a-tnn_trainer_class_nsgd.o: tnn_trainer_class_nsgd.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_trainer_class_nsgd.o -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_trainer_class_nsgd.Tpo -c -o libtnn_a-tnn_trainer_class_nsgd.o `test -f 'tnn_trainer_class_nsgd.c' || echo '$(srcdir)/'`tnn_trainer_class_nsgd.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_trainer_class_nsgd.Tpo $(DEPDIR)/libtnn_a-tnn_trainer_class_nsgd.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_trainer_class_nsgd.c' object='libtnn_a-tnn_trainer_class_nsgd.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_trainer_class_nsgd.o `test -f 'tnn_trainer_class_nsgd.c' || echo '$(srcdir)/'`tnn_trainer_class_nsgd.c
-
-libtnn_a-tnn_trainer_class_nsgd.obj: tnn_trainer_class_nsgd.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -MT libtnn_a-tnn_trainer_class_nsgd.obj -MD -MP -MF $(DEPDIR)/libtnn_a-tnn_trainer_class_nsgd.Tpo -c -o libtnn_a-tnn_trainer_class_nsgd.obj `if test -f 'tnn_trainer_class_nsgd.c'; then $(CYGPATH_W) 'tnn_trainer_class_nsgd.c'; else $(CYGPATH_W) '$(srcdir)/tnn_trainer_class_nsgd.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_a-tnn_trainer_class_nsgd.Tpo $(DEPDIR)/libtnn_a-tnn_trainer_class_nsgd.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_trainer_class_nsgd.c' object='libtnn_a-tnn_trainer_class_nsgd.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_a_CFLAGS) $(CFLAGS) -c -o libtnn_a-tnn_trainer_class_nsgd.obj `if test -f 'tnn_trainer_class_nsgd.c'; then $(CYGPATH_W) 'tnn_trainer_class_nsgd.c'; else $(CYGPATH_W) '$(srcdir)/tnn_trainer_class_nsgd.c'; fi`
+clean-libtool:
+	-rm -rf .libs _libs
 install-pkgincludeHEADERS: $(pkginclude_HEADERS)
 	@$(NORMAL_INSTALL)
 	test -z "$(pkgincludedir)" || $(MKDIR_P) "$(DESTDIR)$(pkgincludedir)"
@@ -609,7 +557,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LIBRARIES) $(HEADERS) tnn_config.h
+all-am: Makefile $(LTLIBRARIES) $(HEADERS) tnn_config.h
 installdirs:
 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
@@ -641,7 +589,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLIBRARIES mostlyclean-am
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -667,7 +616,7 @@ install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-libLIBRARIES
+install-exec-am: install-libLTLIBRARIES
 
 install-html: install-html-am
 
@@ -696,7 +645,8 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
 pdf: pdf-am
 
@@ -706,23 +656,24 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLIBRARIES uninstall-pkgincludeHEADERS
+uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgincludeHEADERS
 
 .MAKE: all install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libLIBRARIES ctags distclean distclean-compile \
-	distclean-generic distclean-hdr distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-libLIBRARIES install-man \
-	install-pdf install-pdf-am install-pkgincludeHEADERS \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-libLIBRARIES \
+	clean-libLTLIBRARIES clean-libtool ctags distclean \
+	distclean-compile distclean-generic distclean-hdr \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-libLTLIBRARIES install-man install-pdf \
+	install-pdf-am install-pkgincludeHEADERS install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
+	uninstall-am uninstall-libLTLIBRARIES \
 	uninstall-pkgincludeHEADERS
 
 

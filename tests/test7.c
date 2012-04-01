@@ -37,7 +37,7 @@
 #define A 10
 #define B 2
 #define D 5.0
-#define L 0.2 //Lambda
+#define L 0.1 //Lambda
 #define P 0.95 //Label set values
 #define E 0.0001 //eta
 #define T 50 //eiter
@@ -108,6 +108,8 @@ int main(){
   //Generate training data
   inputs = rdata(Q, A, D);
   labels = rlabel(Q, B);
+
+  printf("Data generated.\n");
 
   //Learn a sample
   input = gsl_matrix_row(inputs, 0);
