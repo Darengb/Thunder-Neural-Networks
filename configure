@@ -11197,7 +11197,7 @@ CC="$lt_save_CC"
 TNN_CURRENT=0
 TNN_REVISION=0
 TNN_AGE=0
-TNN_LT_VERSION="${TNN_CURRENT}:${TNN_REVISION}:${GSL_AGE}"
+TNN_LT_VERSION="${TNN_CURRENT}:${TNN_REVISION}:${TNN_AGE}"
 
 
 ac_ext=c
@@ -14409,3 +14409,4 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
+
