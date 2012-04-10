@@ -192,6 +192,8 @@ tnn_error tnn_param_state_sub(tnn_param *p, tnn_state *s, tnn_state *t, size_t o
   t->x = xv.vector;
   t->dx = dxv.vector;
   t->valid = true;
+  t->parent = s;
+  t->offset = offset;
 
   return TNN_ERROR_SUCCESS;
 }

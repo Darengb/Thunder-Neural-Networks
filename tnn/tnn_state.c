@@ -17,12 +17,15 @@
 tnn_error tnn_state_init(tnn_state *s, size_t n){
   s->valid = false;
   s->size = n;
+  s->parent = NULL;
+  s->offset = 0L;
   return TNN_ERROR_SUCCESS;
 }
 
 tnn_error tnn_state_debug(tnn_state *s){
   size_t i;
-  printf("state = %p, size = %ld, valid = %c, prev = %p, next = %p\n", s, s->size, s->valid == true?'T':'F', s->prev, s->next);
+  printf("state = %p, size = %ld, valid = %c, parent = %p, offset = %ld, prev = %p, next = %p\n",
+	 s, s->size, s->valid == true?'T':'F', s->parent, s->offset, s->prev, s->next);
   if(s->valid == true){
     printf("x:");
     for(i = 0; i < s->size; i = i + 1){

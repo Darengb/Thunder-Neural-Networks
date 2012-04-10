@@ -27,6 +27,10 @@ typedef struct __STRUCT_tnn_state{
   size_t size;
   //Validity flag
   bool valid;
+  //Parent of this state (if any, for the sub operation in tnn_param)
+  struct __STRUCT_tnn_state *parent;
+  //Off-set of this state (if parent)
+  size_t offset;
 
   //utlist support
   struct __STRUCT_tnn_state *next;

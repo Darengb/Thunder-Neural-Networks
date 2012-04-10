@@ -19,7 +19,6 @@
 
 #include <tnn/tnn_error.h>
 #include <tnn/tnn_state.h>
-
 #ifndef TNN_MODULE_H
 #define TNN_MODULE_H
 

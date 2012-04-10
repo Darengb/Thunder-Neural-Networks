@@ -153,7 +153,7 @@ tnn_error tnn_module_debug_linear(tnn_module *m){
     return ret;
   }
   printf("output: ");
-  if((tnn_state_debug(m->output)) != TNN_ERROR_SUCCESS){
+  if((ret = tnn_state_debug(m->output)) != TNN_ERROR_SUCCESS){
     printf("module (linear) debug error\n");
     return ret;
   }
