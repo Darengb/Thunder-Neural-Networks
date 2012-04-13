@@ -35,10 +35,12 @@ typedef enum __ENUM_tnn_error{
   TNN_ERROR_TRAINER_CLASS_MISTYPE, //Trainer - classification type mismatch
   TNN_ERROR_TRAINER_CLASS_NVALIDP, //Trainer - classification invalid input parameters
   
-
   TNN_ERROR_REG_FUNCNDEF, //Regularizer function undefined
   TNN_ERROR_REG_MISTYPE, //Regularizer type mismatch
   TNN_ERROR_REG_INCOMP, //Regularizer numerical incompatibility
+
+  TNN_ERROR_PSTABLE_EXIST, //State already exist in the table
+  TNN_ERROR_PSTABLE_NEXIST, //State does not exist in the table
 
   TNN_ERROR_SIZE //Size indicator
 } tnn_error;

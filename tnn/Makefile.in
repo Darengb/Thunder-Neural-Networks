@@ -80,7 +80,7 @@ am_libtnn_la_OBJECTS = libtnn_la-tnn_loss.lo libtnn_la-tnn_machine.lo \
 	libtnn_la-tnn_module_bias.lo libtnn_la-tnn_module_linear.lo \
 	libtnn_la-tnn_param.lo libtnn_la-tnn_reg_l1.lo \
 	libtnn_la-tnn_state.lo libtnn_la-tnn_trainer_class_nsgd.lo \
-	libtnn_la-tnn_module_sum.lo
+	libtnn_la-tnn_module_sum.lo libtnn_la-tnn_pstable.lo
 libtnn_la_OBJECTS = $(am_libtnn_la_OBJECTS)
 libtnn_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libtnn_la_CFLAGS) \
@@ -219,8 +219,8 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libtnn.la
-pkginclude_HEADERS = tnn_error.h tnn_config.h tnn_loss_euclidean.h tnn_loss.h tnn_machine.h tnn_macro.h tnn_module_bias.h tnn_module.h tnn_module_linear.h tnn_numeric.h tnn_param.h tnn_reg.h tnn_reg_l1.h tnn_reg_l2.h tnn_state.h tnn_trainer_class.h tnn_trainer_class_nsgd.h uthash.h utlist.h utarray.h tnn_module_sum.h
-libtnn_la_SOURCES = tnn_loss.c tnn_machine.c tnn_module.c tnn_numeric.c tnn_reg.c tnn_reg_l2.c tnn_trainer_class.c tnn_loss_euclidean.c tnn_module_bias.c tnn_module_linear.c tnn_param.c tnn_reg_l1.c tnn_state.c tnn_trainer_class_nsgd.c tnn_module_sum.c
+pkginclude_HEADERS = tnn_error.h tnn_config.h tnn_loss_euclidean.h tnn_loss.h tnn_machine.h tnn_macro.h tnn_module_bias.h tnn_module.h tnn_module_linear.h tnn_numeric.h tnn_param.h tnn_reg.h tnn_reg_l1.h tnn_reg_l2.h tnn_state.h tnn_trainer_class.h tnn_trainer_class_nsgd.h uthash.h utlist.h utarray.h tnn_module_sum.h tnn_pstable.h
+libtnn_la_SOURCES = tnn_loss.c tnn_machine.c tnn_module.c tnn_numeric.c tnn_reg.c tnn_reg_l2.c tnn_trainer_class.c tnn_loss_euclidean.c tnn_module_bias.c tnn_module_linear.c tnn_param.c tnn_reg_l1.c tnn_state.c tnn_trainer_class_nsgd.c tnn_module_sum.c tnn_pstable.c
 libtnn_la_CFLAGS = -I$(top_srcdir)
 libtnn_la_LDFLAGS = -version-info $(TNN_LT_VERSION)
 all: tnn_config.h
@@ -324,6 +324,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_module_sum.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_numeric.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_param.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_pstable.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_reg.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_reg_l1.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libtnn_la-tnn_reg_l2.Plo@am__quote@
@@ -456,6 +457,13 @@ libtnn_la-tnn_module_sum.lo: tnn_module_sum.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_module_sum.c' object='libtnn_la-tnn_module_sum.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_module_sum.lo `test -f 'tnn_module_sum.c' || echo '$(srcdir)/'`tnn_module_sum.c
+
+libtnn_la-tnn_pstable.lo: tnn_pstable.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -MT libtnn_la-tnn_pstable.lo -MD -MP -MF $(DEPDIR)/libtnn_la-tnn_pstable.Tpo -c -o libtnn_la-tnn_pstable.lo `test -f 'tnn_pstable.c' || echo '$(srcdir)/'`tnn_pstable.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libtnn_la-tnn_pstable.Tpo $(DEPDIR)/libtnn_la-tnn_pstable.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tnn_pstable.c' object='libtnn_la-tnn_pstable.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libtnn_la_CFLAGS) $(CFLAGS) -c -o libtnn_la-tnn_pstable.lo `test -f 'tnn_pstable.c' || echo '$(srcdir)/'`tnn_pstable.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
