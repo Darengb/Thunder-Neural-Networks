@@ -11,6 +11,7 @@
  * tnn_error tnn_module_fprop_sum(tnn_module *m);
  * tnn_error tnn_module_randomize_sum(tnn_module *m, double k);
  * tnn_error tnn_module_destroy_sum(tnn_module *m);
+ * tnn_error tnn_module_clone_sum(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *io);
  * tnn_error tnn_module_debug_sum(tnn_module *m);
  * tnn_error tnn_module_sum_get(tnn_module *m, tnn_state **t, size_t ind); 
  */
@@ -38,6 +39,7 @@ tnn_error tnn_module_bprop_sum(tnn_module *m);
 tnn_error tnn_module_fprop_sum(tnn_module *m);
 tnn_error tnn_module_randomize_sum(tnn_module *m, double k);
 tnn_error tnn_module_destroy_sum(tnn_module *m);
+tnn_error tnn_module_clone_sum(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *io);
 tnn_error tnn_module_debug_sum(tnn_module *m);
 tnn_error tnn_module_sum_get(tnn_module *m, tnn_state **t, size_t ind); 
 

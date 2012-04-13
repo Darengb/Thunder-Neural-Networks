@@ -8,6 +8,7 @@
  * tnn_error tnn_module_fprop_sum(tnn_module *m);
  * tnn_error tnn_module_randomize_sum(tnn_module *m, double k);
  * tnn_error tnn_module_destroy_sum(tnn_module *m);
+ * tnn_error tnn_module_clone_sum(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *t);
  * tnn_error tnn_module_debug_sum(tnn_module *m);
  * tnn_error tnn_module_sum_get(tnn_module *m, tnn_state **t, size_t ind);
  */
@@ -76,6 +77,7 @@ tnn_error tnn_module_init_sum(tnn_module *m, tnn_state *input, tnn_state *output
   m->fprop = &tnn_module_fprop_sum;
   m->randomize = &tnn_module_randomize_sum;
   m->destroy = &tnn_module_destroy_sum;
+  m->clone = &tnn_module_clone_sum;
   m->debug = &tnn_module_debug_sum;
   
   return TNN_ERROR_SUCCESS;
@@ -136,6 +138,62 @@ tnn_error tnn_module_destroy_sum(tnn_module *m){
   utarray_free(((tnn_module_sum*)m->c)->sarray);
   //Destroy the constant
   free((tnn_module_sum*)m->c);
+
+  return TNN_ERROR_SUCCESS;
+}
+
+tnn_error tnn_module_clone_sum(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *t){
+  tnn_error ret;
+  tnn_module_sum *c;
+  tnn_state *s1, *s2, **s;
+  UT_icd sarray_icd = {sizeof(tnn_state*), NULL, NULL, NULL};
+  size_t i;
+
+  //Routine check
+  if(m1->t != TNN_MODULE_TYPE_SUM){
+    return TNN_ERROR_MODULE_MISTYPE;
+  }
+
+  //Retrieve input and output
+  TNN_MACRO_ERRORTEST(tnn_pstable_find(t, m1->input, &m2->input), ret);
+  TNN_MACRO_ERRORTEST(tnn_pstable_find(t, m1->output, &m2->output), ret);
+  if(m1->input->size != m2->input->size || m1->output->size != m2->output->size){
+    return TNN_ERROR_STATE_INCOMP;
+  }
+
+  //Defined type
+  m2->t = TNN_MODULE_TYPE_SUM;
+
+  //Constant paramter is a new tnn_module_sum
+  c = (void*)malloc(sizeof(tnn_module_sum));
+  m2->c = c;
+
+  //Allocate the state
+  tnn_state_init(&m2->w, 0L);
+  
+  //Find the sub states
+  utarray_new(c->sarray, &sarray_icd);
+  for(i = 0; i < utarray_len(((tnn_module_sum*)m1->c)->sarray); i = i + 1){
+    s2 = (tnn_state *) malloc(sizeof(tnn_state));
+    if(s2 == NULL){
+      return TNN_ERROR_ALLOC;
+    }
+    s = (tnn_state **)utarray_eltptr(((tnn_module_sum*)m1->c)->sarray, i);
+    s1 = *s;
+    TNN_MACRO_ERRORTEST(tnn_pstable_find(t, s1, &s2), ret);
+    if (s1->size != s2->size){
+      return TNN_ERROR_STATE_INCOMP;
+    }
+    utarray_push_back(c->sarray, &s2);
+  }
+
+  //Store the functions
+  m2->bprop = &tnn_module_bprop_sum;
+  m2->fprop = &tnn_module_fprop_sum;
+  m2->randomize = &tnn_module_randomize_sum;
+  m2->destroy = &tnn_module_destroy_sum;
+  m2->debug = &tnn_module_debug_sum;
+  m2->clone = &tnn_module_clone_sum;
 
   return TNN_ERROR_SUCCESS;
 }

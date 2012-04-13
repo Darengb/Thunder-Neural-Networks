@@ -8,6 +8,7 @@
  * tnn_error tnn_module_fprop_linear(tnn_module *m);
  * tnn_error tnn_module_randomize_linear(tnn_module *m, double k);
  * tnn_error tnn_module_destroy_linear(tnn_module *m);
+ * tnn_error tnn_module_clone_linear(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *t)
  * tnn_error tnn_module_debug_linear(tnn_module *m);
  */
 
@@ -15,6 +16,7 @@
 #include <tnn/tnn_state.h>
 #include <tnn/tnn_param.h>
 #include <tnn/tnn_module.h>
+#include <tnn/tnn_pstable.h>
 
 #ifndef TNN_MODULE_LINEAR_H
 #define TNN_MODULE_LINEAR_H
@@ -26,5 +28,6 @@ tnn_error tnn_module_fprop_linear(tnn_module *m);
 tnn_error tnn_module_randomize_linear(tnn_module *m, double k);
 tnn_error tnn_module_destroy_linear(tnn_module *m);
 tnn_error tnn_module_debug_linear(tnn_module *m);
+tnn_error tnn_module_clone_linear(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *t);
 
 #endif //TNN_MODULE_LINEAR_H

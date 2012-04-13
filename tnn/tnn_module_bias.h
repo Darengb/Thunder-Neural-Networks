@@ -8,6 +8,7 @@
  * tnn_error tnn_module_fprop_bias(tnn_module *m);
  * tnn_error tnn_module_randomize_bias(tnn_module *m, double k);
  * tnn_error tnn_module_destroy_bias(tnn_module *m);
+ * tnn_error tnn_module_clone_bias(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *t);
  * tnn_error tnn_module_debug_bias(tnn_module *m);
  */
 
@@ -25,6 +26,7 @@ tnn_error tnn_module_bprop_bias(tnn_module *m);
 tnn_error tnn_module_fprop_bias(tnn_module *m);
 tnn_error tnn_module_randomize_bias(tnn_module *m, double k);
 tnn_error tnn_module_destroy_bias(tnn_module *m);
+tnn_error tnn_module_clone_bias(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *t);
 tnn_error tnn_module_debug_bias(tnn_module *m);
 
 #endif //TNN_MODULE_BIAS_H

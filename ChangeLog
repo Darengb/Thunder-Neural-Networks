@@ -1,5 +1,9 @@
 Xiang Zhang <zhangxiangxiao@163.com>	2012-04-13
 
+    Added test for tnn_pstable
+
+Xiang Zhang <zhangxiangxiao@163.com>	2012-04-13
+
     Fix the allocating bug of tnn_param for sub-states
 
 Xiang Zhang <zhangxiangxiao@163.com>	2012-04-13

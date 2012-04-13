@@ -50,7 +50,7 @@ typedef tnn_error (*TNN_MODULE_FUNC_FPROP) (struct __STRUCT_tnn_module *module);
 typedef tnn_error (*TNN_MODULE_FUNC_RANDOMIZE) (struct __STRUCT_tnn_module *module, double k);
 typedef tnn_error (*TNN_MODULE_FUNC_DESTROY) (struct __STRUCT_tnn_module *module);
 typedef tnn_error (*TNN_MODULE_FUNC_DEBUG) (struct __STRUCT_tnn_module *module);
-typedef tnn_error (*TNN_MODULE_FUNC_CLONE) (struct __STRCUT_tnn_module *m1, struct __STRUCT_tnn_module *m2, tnn_param *p, tnn_pstable *t);
+typedef tnn_error (*TNN_MODULE_FUNC_CLONE) (struct __STRUCT_tnn_module *m1, struct __STRUCT_tnn_module *m2, tnn_param *p, tnn_pstable *t);
 
 //The structure
 typedef struct __STRUCT_tnn_module{

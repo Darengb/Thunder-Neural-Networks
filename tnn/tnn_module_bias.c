@@ -52,6 +52,7 @@ tnn_error tnn_module_init_bias(tnn_module *m, tnn_state *input, tnn_state *outpu
   m->fprop = &tnn_module_fprop_bias;
   m->randomize = &tnn_module_randomize_bias;
   m->destroy = &tnn_module_destroy_bias;
+  m->clone = &tnn_module_clone_bias;
   m->debug = &tnn_module_debug_bias;
 
   return TNN_ERROR_SUCCESS;
@@ -117,6 +118,45 @@ tnn_error tnn_module_randomize_bias(tnn_module *m, double k){
 
 tnn_error tnn_module_destroy_bias(tnn_module *m){
   //Do nothing...
+  return TNN_ERROR_SUCCESS;
+}
+
+tnn_error tnn_module_clone_bias(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *t){
+  tnn_error ret;
+
+  //Routine check
+  if(m1->t != TNN_MODULE_TYPE_BIAS){
+    return TNN_ERROR_MODULE_MISTYPE;
+  }
+
+  //Retrieve input and output
+  TNN_MACRO_ERRORTEST(tnn_pstable_find(t, m1->input, &m2->input), ret);
+  TNN_MACRO_ERRORTEST(tnn_pstable_find(t, m1->output, &m2->output), ret);
+  if(m1->input->size != m2->input->size || m1->output->size != m2->output->size){
+    return TNN_ERROR_STATE_INCOMP;
+  }
+
+  //Defined type
+  m2->t = TNN_MODULE_TYPE_BIAS;
+
+  //No constant paramters
+  m2->c = NULL;
+  
+  //Allocate the parameter states
+  tnn_state_init(&m2->w, m2->input->size);
+  TNN_MACRO_ERRORTEST(tnn_param_state_alloc(p,&m2->w), ret);
+
+  //Store the functions
+  m2->bprop = &tnn_module_bprop_bias;
+  m2->fprop = &tnn_module_fprop_bias;
+  m2->randomize = &tnn_module_randomize_bias;
+  m2->destroy = &tnn_module_destroy_bias;
+  m2->debug = &tnn_module_debug_bias;
+  m2->clone = &tnn_module_clone_bias;
+
+  //Copy the state
+  TNN_MACRO_ERRORTEST(tnn_state_copy(&m1->w, &m2->w), ret);
+
   return TNN_ERROR_SUCCESS;
 }
 
