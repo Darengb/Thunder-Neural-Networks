@@ -28,7 +28,7 @@
 
 int main(){
   tnn_state s[N];
-  tnn_state t, u;
+  tnn_state t, u, v;
   tnn_param p;
   int i,j;
 
@@ -65,6 +65,13 @@ int main(){
 
   printf("Initializing state u: %s\n", TEST_FUNC(tnn_state_init(&u, J)));
   printf("Getting subvector u: %s\n", TEST_FUNC(tnn_param_state_sub(&p, &s[N-1], &u, 1)));
+  tnn_param_debug(&p);
+
+  printf("Initializing state v: %s\n", TEST_FUNC(tnn_state_init(&v, s[N-1].size)));
+  tnn_state_debug(&v);
+  printf("Allocating state v: %s\n", TEST_FUNC(tnn_param_state_calloc(&p, &v)));
+  printf("Copying s to v: %s\n", TEST_FUNC(tnn_state_copy(&s[N-1],&v)));
+  tnn_state_debug(&v);
   tnn_param_debug(&p);
 
   //Destroy the parameter

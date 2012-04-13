@@ -8,6 +8,7 @@
  * This header also declares the following functions:
  * tnn_error tnn_state_init(tnn_state *s, size_t n);
  * tnn_error tnn_state_debug(tnn_state *s);
+ * tnn_error tnn_state_copy(tnn_state *s, tnn_state *t);
  */
 
 #include <stddef.h>
@@ -43,5 +44,8 @@ tnn_error tnn_state_init(tnn_state *s, size_t n);
 
 //Print debug information
 tnn_error tnn_state_debug(tnn_state *s);
+
+//Copy a state to another state: both must be valid
+tnn_error tnn_state_copy(tnn_state *s, tnn_state *t);
 
 #endif //TNN_STATE_H

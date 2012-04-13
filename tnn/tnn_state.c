@@ -5,14 +5,17 @@
  * This header implements the following functions:
  * tnn_error tnn_state_init(tnn_state *s, size_t n);
  * tnn_error tnn_state_debug(tnn_state *s);
+ * tnn_error tnn_state_copy(tnn_state *s, tnn_state *t);
  */
 
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <gsl/gsl_vector.h>
+#include <gsl/gsl_blas.h>
 #include <tnn/tnn_state.h>
 #include <tnn/tnn_error.h>
+#include <tnn/tnn_macro.h>
 
 tnn_error tnn_state_init(tnn_state *s, size_t n){
   s->valid = false;
@@ -38,5 +41,22 @@ tnn_error tnn_state_debug(tnn_state *s){
     }
     printf("\n");
   }
+  return TNN_ERROR_SUCCESS;
+}
+
+tnn_error tnn_state_copy(tnn_state *s, tnn_state *t){
+  //Check validity
+  if(s->valid != true || t->valid != true){
+    return TNN_ERROR_STATE_INVALID;
+  }
+
+  //Check dimensions
+  if(s->size != t->size){
+    return TNN_ERROR_STATE_INCOMP;
+  }
+
+  TNN_MACRO_GSLTEST(gsl_blas_dcopy(&s->x, &t->x));
+  TNN_MACRO_GSLTEST(gsl_blas_dcopy(&s->dx, &t->dx));
+
   return TNN_ERROR_SUCCESS;
 }

@@ -1,3 +1,7 @@
+Xiang Zhang <zhangxiangxiao@163.com>	2012-04-13
+
+    State Pointer Hash Table Implemented
+
 Xiang Zhang <zhangxiangxiao@163.com>	2012-04-10
 
     Added sum module; sub-state has pointer to its parent.

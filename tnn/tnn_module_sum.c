@@ -185,6 +185,7 @@ tnn_error tnn_module_sum_get(tnn_module *m, tnn_state **t, size_t ind){
 
   if(ind < utarray_len(((tnn_module_sum*)m->c)->sarray)){
     s = (tnn_state **)utarray_eltptr(((tnn_module_sum*)m->c)->sarray, ind);
+    *t = *s;
   } else {
     TNN_ERROR_PARAM_NEXIST;
   }

@@ -8,10 +8,12 @@
  * tnn_error tnn_module_randomize(tnn_module *m);
  * tnn_error tnn_module_destroy(tnn_module *m);
  * tnn_error tnn_module_debug(tnn_module *m);
+ * tnn_error tnn_module_clone(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *t);
  */
 
 #include <tnn/tnn_error.h>
 #include <tnn/tnn_module.h>
+#include <tnn/tnn_pstable.h>
 
 //Polymorphic back-propagation method
 tnn_error tnn_module_bprop(tnn_module *m){
@@ -41,6 +43,14 @@ tnn_error tnn_module_randomize(tnn_module *m, double k){
 tnn_error tnn_module_destroy(tnn_module *m){
   if(m->destroy != NULL){
     return (*m->destroy)(m);
+  }
+  return TNN_ERROR_MODULE_FUNCNDEF;
+}
+
+//Polymorphic clone method: clone m1 to m2, using p to allocate parameters, and use t to retrieve input/output.
+tnn_error tnn_module_clone(tnn_module *m1, tnn_module *m2, tnn_param *p, tnn_pstable *t){
+  if(m1->clone != NULL){
+    return (*m1->clone)(m1, m2, p, t);
   }
   return TNN_ERROR_MODULE_FUNCNDEF;
 }

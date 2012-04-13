@@ -71,12 +71,25 @@ tnn_error tnn_param_state_alloc(tnn_param *p, tnn_state *s){
   //Renew the information stored in all lists
   i = 0;
   DL_FOREACH_SAFE(p->states, elt, tmp){
-    xv = gsl_vector_subvector(p->x, i, elt->size);
-    dxv = gsl_vector_subvector(p->dx, i, elt->size);
-    elt->x = xv.vector;
-    elt->dx = dxv.vector;
-    elt->valid = true;
-    i = i + elt->size;
+    if(elt->parent == NULL){
+      xv = gsl_vector_subvector(p->x, i, elt->size);
+      dxv = gsl_vector_subvector(p->dx, i, elt->size);
+      elt->x = xv.vector;
+      elt->dx = dxv.vector;
+      elt->valid = true;
+      i = i + elt->size;
+    }
+  }
+
+  //Renew the information in all substates
+  DL_FOREACH_SAFE(p->states, elt, tmp){
+    if(elt->parent != NULL){
+      xv = gsl_vector_subvector(&elt->parent->x, elt->offset, elt->size);
+      dxv = gsl_vector_subvector(&elt->parent->dx, elt->offset, elt->size);
+      elt->x = xv.vector;
+      elt->dx = dxv.vector;
+      elt->valid = true;
+    }
   }
 
   return TNN_ERROR_SUCCESS;
@@ -125,12 +138,25 @@ tnn_error tnn_param_state_calloc(tnn_param *p, tnn_state *s){
   //Renew the information stored in all lists
   i = 0;
   DL_FOREACH_SAFE(p->states, elt, tmp){
-    xv = gsl_vector_subvector(p->x, i, elt->size);
-    dxv = gsl_vector_subvector(p->dx, i, elt->size);
-    elt->x = xv.vector;
-    elt->dx = dxv.vector;
-    elt->valid = true;
-    i = i + elt->size;
+    if(elt->parent == NULL){
+      xv = gsl_vector_subvector(p->x, i, elt->size);
+      dxv = gsl_vector_subvector(p->dx, i, elt->size);
+      elt->x = xv.vector;
+      elt->dx = dxv.vector;
+      elt->valid = true;
+      i = i + elt->size;
+    }
+  }
+
+  //Renew the information in all substates
+  DL_FOREACH_SAFE(p->states, elt, tmp){
+    if(elt->parent != NULL){
+      xv = gsl_vector_subvector(&elt->parent->x, elt->offset, elt->size);
+      dxv = gsl_vector_subvector(&elt->parent->dx, elt->offset, elt->size);
+      elt->x = xv.vector;
+      elt->dx = dxv.vector;
+      elt->valid = true;
+    }
   }
 
   return TNN_ERROR_SUCCESS;

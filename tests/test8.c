@@ -1,12 +1,12 @@
-/* Dummy Test 4 for TNN Utilities
+/* Dummy Test 8 for TNN Utilities
  * By Xiang Zhang @ New York University
- * Version 0.1, 04/12/2012
+ * Version 0.2, 04/13/2012
  *
  * Tests for the following utilities were performed:
  * tnn_module_sum
  *
  * Results:
- * Perfect Coding!
+ * 1.Did not pass out the state pointer in get
  */
 
 #include <stdio.h>
@@ -23,7 +23,7 @@
 
 int main(){
   tnn_param p, io;
-  tnn_state in, out;
+  tnn_state in, out, *s;
   tnn_module m;
   int i;
 
@@ -54,6 +54,11 @@ int main(){
 
   printf("Executing bprop using polymorphic call: %s\n", TEST_FUNC(tnn_module_bprop(&m)));
   printf("Debugging module m: %s\n", TEST_FUNC(tnn_module_debug(&m)));
+
+  for(i = 0; i < A/B; i = i + 1){
+    printf("Executing get: %s\n", TEST_FUNC(tnn_module_sum_get(&m, &s, i)));
+    printf("Debugging s: %s\n", TEST_FUNC(tnn_state_debug(s)));
+  }
 
   printf("Debugging parameter p: %s\n", TEST_FUNC(tnn_param_debug(&p)));
   printf("Debugging parameter io: %s\n", TEST_FUNC(tnn_param_debug(&io)));
