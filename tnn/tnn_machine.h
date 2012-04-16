@@ -43,9 +43,9 @@
 //The structure
 typedef struct __STRUCT_tnn_machine{
   //Input state: make min use it!
-  tnn_state sin;
+  tnn_state* sin;
   //Output state: make mout use it!
-  tnn_state sout;
+  tnn_state* sout;
   //Input and output parameters: all states stored in it will be destroyed when destroy this machine!
   tnn_param io;
   //Store all the modules: in sequence forward and backward propagation!

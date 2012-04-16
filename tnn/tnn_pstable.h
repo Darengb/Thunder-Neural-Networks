@@ -14,6 +14,7 @@
  * tnn_error tnn_pstable_destroy(tnn_pstable *t);
  * tnn_error tnn_pstable_debug(tnn_pstable *t);
  * tnn_error tnn_pstable_get_length(tnn_pstable *t, size_t *l);
+ * tnn_error tnn_pstable_param_alloc(tnn_pstable *t, tnn_param *p1, tnn_param *p2);
  */
 
 #include <tnn/uthash.h>
@@ -61,5 +62,9 @@ tnn_error tnn_pstable_debug(tnn_pstable *t);
 
 //Get the length
 tnn_error tnn_pstable_get_length(tnn_pstable *t, size_t *l);
+
+//Construct pstable from the paramter
+//t and p2 must be initialized.
+tnn_error tnn_pstable_param_alloc(tnn_pstable *t, tnn_param *p1, tnn_param *p2);
 
 #endif //TNN_PSTABLE_H

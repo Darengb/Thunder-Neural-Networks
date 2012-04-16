@@ -36,9 +36,15 @@
 tnn_error tnn_machine_init(tnn_machine *m, size_t ninput, size_t noutput){
   tnn_error ret;
 
+  m->sin = malloc(sizeof(tnn_state));
+  m->sout = malloc(sizeof(tnn_state));
+  if(m->sin == NULL || m->sout == NULL){
+    return TNN_ERROR_ALLOC;
+  }
+
   //Initialize input and output
-  TNN_MACRO_ERRORTEST(tnn_state_init(&m->sin, ninput),ret);
-  TNN_MACRO_ERRORTEST(tnn_state_init(&m->sout, noutput),ret);
+  TNN_MACRO_ERRORTEST(tnn_state_init(m->sin, ninput),ret);
+  TNN_MACRO_ERRORTEST(tnn_state_init(m->sout, noutput),ret);
 
   //Initialize io and p
   TNN_MACRO_ERRORTEST(tnn_param_init(&m->io),ret);
@@ -48,8 +54,8 @@ tnn_error tnn_machine_init(tnn_machine *m, size_t ninput, size_t noutput){
   m->m = NULL;
 
   //Allocate input and output
-  TNN_MACRO_ERRORTEST(tnn_param_state_alloc(&m->io, &m->sin),ret);
-  TNN_MACRO_ERRORTEST(tnn_param_state_alloc(&m->io, &m->sout),ret);
+  TNN_MACRO_ERRORTEST(tnn_param_state_alloc(&m->io, m->sin),ret);
+  TNN_MACRO_ERRORTEST(tnn_param_state_alloc(&m->io, m->sout),ret);
   return TNN_ERROR_SUCCESS;
 }
 
@@ -77,13 +83,13 @@ tnn_error tnn_machine_state_calloc(tnn_machine *m, tnn_state *s){
 
 //Get the input state of this machine
 tnn_error tnn_machine_get_sin(tnn_machine *m, tnn_state **s){
-  *s = &m->sin;
+  *s = m->sin;
   return TNN_ERROR_SUCCESS;
 }
 
 //Get the output state of this machine
 tnn_error tnn_machine_get_sout(tnn_machine *m, tnn_state **s){
-  *s = &m->sout;
+  *s = m->sout;
   return TNN_ERROR_SUCCESS;
 }
 
@@ -223,9 +229,7 @@ tnn_error tnn_machine_destroy(tnn_machine *m){
 
   //Destroy all the io states
   DL_FOREACH_SAFE(states, sel, stmp){
-    if(sel != &m->sin && sel != &m->sout){
-      free(sel);
-    }
+    free(sel);
   }
 
   return ret;
@@ -241,13 +245,13 @@ tnn_error tnn_machine_debug(tnn_machine *m){
   printf("machine = %p, modules = %p\n", m, m->m);
 
   printf("sin: ");
-  if((ret = tnn_state_debug(&m->sin)) != TNN_ERROR_SUCCESS){
+  if((ret = tnn_state_debug(m->sin)) != TNN_ERROR_SUCCESS){
     printf("sin state debug error in machine\n");
     return ret;
   }
 
   printf("sout: ");
-  if((ret = tnn_state_debug(&m->sout)) != TNN_ERROR_SUCCESS){
+  if((ret = tnn_state_debug(m->sout)) != TNN_ERROR_SUCCESS){
     printf("sout state debug error in machine\n");
     return ret;
   }

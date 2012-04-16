@@ -48,7 +48,7 @@ tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t 
   if(sin->valid != true){
     return TNN_ERROR_STATE_INVALID;
   }
-  if(t->label.valid != true){
+  if(t->label->valid != true){
     return TNN_ERROR_STATE_INVALID;
   }
 
@@ -61,7 +61,7 @@ tnn_error tnn_trainer_class_run(tnn_trainer_class *t, gsl_vector *input, size_t 
   //Copy each lset to each label, and do forward propagation of loss
   for(i = 0; i < t->lset->size1; i = i + 1){
     v = gsl_matrix_row(t->lset, i);
-    TNN_MACRO_GSLTEST(gsl_blas_dcopy(&v.vector, &t->label.x));
+    TNN_MACRO_GSLTEST(gsl_blas_dcopy(&v.vector, &t->label->x));
     TNN_MACRO_ERRORTEST(tnn_loss_fprop(&t->l), ret);
     gsl_vector_set(t->losses, i, gsl_vector_get(&t->l.output->x, 0));
   }
@@ -183,7 +183,7 @@ tnn_error tnn_trainer_class_debug(tnn_trainer_class *t){
   }
 
   printf("label: ");
-  if((ret = tnn_state_debug(&t->label)) != TNN_ERROR_SUCCESS){
+  if((ret = tnn_state_debug(t->label)) != TNN_ERROR_SUCCESS){
     printf("label state debug error in trainer classification\n");
     return ret;
   }
@@ -232,6 +232,6 @@ tnn_error tnn_trainer_class_get_reg(tnn_trainer_class *t, tnn_reg **r){
 
 //Get the address of the label
 tnn_error tnn_trainer_class_get_label(tnn_trainer_class *t, tnn_state **s){
-  *s = &t->label;
+  *s = t->label;
   return TNN_ERROR_SUCCESS;
 }

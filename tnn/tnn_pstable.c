@@ -9,13 +9,18 @@
  * tnn_error tnn_pstable_find(tnn_pstable *t, tnn_state *key, tnn_state **s);
  * tnn_error tnn_pstable_destroy(tnn_pstable *t);
  * tnn_error tnn_pstable_get_length(tnn_pstable *t, size_t *l);
+ * tnn_error tnn_pstable_param_alloc(tnn_pstable *t, tnn_param *p1, tnn_param *p2);
  */
 
-#include <tnn/uthash.h>
-#include <tnn/tnn_state.h>
-#include <tnn/tnn_error.h>
-#include <tnn/tnn_pstable.h>
 #include <stdlib.h> //malloc and free
+#include <stdbool.h>
+#include <tnn/uthash.h>
+#include <tnn/utlist.h>
+#include <tnn/tnn_state.h>
+#include <tnn/tnn_param.h>
+#include <tnn/tnn_error.h>
+#include <tnn/tnn_macro.h>
+#include <tnn/tnn_pstable.h>
 
 //Initialize the table
 tnn_error tnn_pstable_init(tnn_pstable *t){
@@ -106,5 +111,54 @@ tnn_error tnn_pstable_debug(tnn_pstable *t){
 //Get the length
 tnn_error tnn_pstable_get_length(tnn_pstable *t, size_t *l){
   *l = t->length;
+  return TNN_ERROR_SUCCESS;
+}
+
+//Construct pstable from the paramter
+//t and p2 must be initialized.
+tnn_error tnn_pstable_param_alloc(tnn_pstable *t, tnn_param *p1, tnn_param *p2){
+  //Algorithm: scan in sequence, add those that can be added.
+
+  tnn_state *s1, *tmp, *s2, *sp;
+  bool updated;
+  tnn_error ret;
+
+  //Loop over all the states in p1 untill no states can be allocated
+  updated = true;
+  while(updated == true){
+    updated = false;
+    DL_FOREACH_SAFE(p1->states, s1, tmp){
+      if(s1->parent == NULL && tnn_pstable_find(t, s1, &s2) == TNN_ERROR_PSTABLE_NEXIST){
+	//Top states
+	updated = true;
+	s2 = (tnn_state *)malloc(sizeof(tnn_state));
+	if(s2 == NULL){
+	  return TNN_ERROR_ALLOC;
+	}
+	TNN_MACRO_ERRORTEST(tnn_state_init(s2,s1->size), ret);
+	TNN_MACRO_ERRORTEST(tnn_param_state_alloc(p2, s2), ret);
+	TNN_MACRO_ERRORTEST(tnn_state_copy(s1,s2), ret);
+	TNN_MACRO_ERRORTEST(tnn_pstable_add(t,s1,s2), ret);
+      } else if(s1->parent != NULL && tnn_pstable_find(t, s1, &s2) == TNN_ERROR_PSTABLE_NEXIST 
+		&& tnn_pstable_find(t, s1->parent, &sp) == TNN_ERROR_SUCCESS){
+	//sub-states
+	updated = true;
+	s2 = (tnn_state *)malloc(sizeof(tnn_state));
+	if(s2 == NULL){
+	  return TNN_ERROR_ALLOC;
+	}
+	TNN_MACRO_ERRORTEST(tnn_state_init(s2,s1->size), ret);
+	TNN_MACRO_ERRORTEST(tnn_param_state_sub(p2,sp,s2,s1->offset), ret);
+	TNN_MACRO_ERRORTEST(tnn_state_copy(s1,s2), ret);
+	TNN_MACRO_ERRORTEST(tnn_pstable_add(t,s1,s2), ret);
+      }
+    }
+  }
+
+  //Check whether there are unallocated states
+  DL_FOREACH_SAFE(p1->states, s1, tmp){
+    TNN_MACRO_ERRORTEST(tnn_pstable_find(t, s1, &s2), ret);
+  }
+
   return TNN_ERROR_SUCCESS;
 }

@@ -64,8 +64,12 @@ tnn_error tnn_trainer_class_init_nsgd(tnn_trainer_class *t, size_t ninput, size_
   TNN_MACRO_ERRORTEST(tnn_machine_init(&t->m, ninput, noutput),ret);
 
   //Initialize the label
-  TNN_MACRO_ERRORTEST(tnn_state_init(&t->label, noutput),ret);
-  TNN_MACRO_ERRORTEST(tnn_machine_state_alloc(&t->m, &t->label),ret);
+  t->label = (tnn_state *) malloc(sizeof(tnn_state));
+  if(t->label == NULL){
+    return TNN_ERROR_ALLOC;
+  }
+  TNN_MACRO_ERRORTEST(tnn_state_init(t->label, noutput),ret);
+  TNN_MACRO_ERRORTEST(tnn_machine_state_alloc(&t->m, t->label),ret);
 
   //Initialize the regularization parameter
   t->lambda = lambda;
@@ -103,7 +107,7 @@ tnn_error tnn_trainer_class_learn_nsgd(tnn_trainer_class *t, gsl_vector *input, 
 
   //Copy the data into the input/label and do forward and backward propagation
   TNN_MACRO_GSLTEST(gsl_blas_dcopy(input, &sin->x));
-  TNN_MACRO_GSLTEST(gsl_blas_dcopy(&lb.vector, &t->label.x));
+  TNN_MACRO_GSLTEST(gsl_blas_dcopy(&lb.vector, &t->label->x));
   TNN_MACRO_ERRORTEST(tnn_machine_fprop(&t->m), ret);
   TNN_MACRO_ERRORTEST(tnn_loss_fprop(&t->l), ret);
   TNN_MACRO_ERRORTEST(tnn_loss_bprop(&t->l), ret);
@@ -179,7 +183,7 @@ tnn_error tnn_trainer_class_train_nsgd(tnn_trainer_class *t, gsl_matrix *inputs,
 
       //Copy the data into the input/label and do forward and backward propagation
       TNN_MACRO_GSLTEST(gsl_blas_dcopy(&in.vector, &sin->x));
-      TNN_MACRO_GSLTEST(gsl_blas_dcopy(&lb.vector, &t->label.x));
+      TNN_MACRO_GSLTEST(gsl_blas_dcopy(&lb.vector, &t->label->x));
       TNN_MACRO_ERRORTEST(tnn_machine_fprop(&t->m), ret);
       TNN_MACRO_ERRORTEST(tnn_loss_fprop(&t->l), ret);
       TNN_MACRO_ERRORTEST(tnn_loss_bprop(&t->l), ret);
@@ -236,7 +240,7 @@ tnn_error tnn_trainer_class_debug_nsgd(tnn_trainer_class *t){
   }
 
   printf("label: ");
-  if((ret = tnn_state_debug(&t->label)) != TNN_ERROR_SUCCESS){
+  if((ret = tnn_state_debug(t->label)) != TNN_ERROR_SUCCESS){
     printf("label state debug error in trainer classification\n");
     return ret;
   }

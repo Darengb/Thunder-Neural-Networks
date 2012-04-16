@@ -65,7 +65,7 @@ typedef struct __STRUCT_tnn_trainer_class{
   //Network loss
   tnn_loss l;
   //Network label state (to be used in loss and allocated in machine's io)
-  tnn_state label;
+  tnn_state *label;
   //Regularizer
   tnn_reg r;
   //Regularizer constant

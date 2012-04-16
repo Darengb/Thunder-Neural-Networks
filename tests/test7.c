@@ -135,6 +135,9 @@ int main(){
   //Fourth debug
   printf("Debugging the trainer: %s\n", TEST_FUNC(tnn_trainer_class_debug(&t)));
 
+  //Destroy the trainer
+  printf("Destroying the trainer: %s\n", TEST_FUNC(tnn_trainer_class_destroy(&t)));
+
   free(labels);
   gsl_matrix_free(inputs);
   return 0;
